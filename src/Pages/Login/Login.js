@@ -1,11 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axios';
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaArrowLeft } from 'react-icons/fa';
 import { Field, Form, Formik } from 'formik';
 import toast from 'react-hot-toast';
+import { AuthContext } from '../../context/authContext';
 
 function Login() {
+
+  const navigate = useNavigate()
+  const { isAuthenticated, setIsAuthenticated, setUserDetails } = useContext(AuthContext)
+
 
   // Function to handle form submission
   const handleFormSubmit = async (values, actions) => {
@@ -15,16 +20,32 @@ function Login() {
       const response = await axios.post('user/login', values);
 
       if (response.data.success) {
-        console.log(response.data);
+        localStorage.setItem('_hw_userDetails', JSON.stringify(response.data.data))
+        localStorage.setItem('_hw_token', response.data.data.token)
+        setUserDetails(response.data.data);
         toast.success('Login Successfull')
+
+        setTimeout(() => {
+          setIsAuthenticated(true)
+          if (response.data.data.role.includes('admin') || response.data.data.role.includes('super-admin')) {
+            navigate('/dashboard')
+          } else navigate('/')
+        }, 400)
       }
 
     } catch (error) {
       // Handle errors (e.g., show an error message)
       console.error('Error submitting form:', error);
-      toast.error(error.response.data.msg)
+      toast.error(error?.response?.data?.msg)
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  })
+
 
   return (
     <div className="grid min-h-screen  w-full place-items-center px-6 py-12 lg:px-8">

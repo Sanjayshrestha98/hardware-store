@@ -91,6 +91,7 @@ function Signup() {
                             address: "",
                             password: "",
                             confirmpassword: "",
+                            // role:'super-admin',
                         }}
                         validationSchema={validationSchema}
                         onSubmit={(values, actions) => {

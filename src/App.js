@@ -7,21 +7,42 @@ import AppNavbar from './components/AppNavbar';
 import Signup from './Pages/Signup/Signup';
 import Contact from './Pages/Contact/Contact';
 import { Toaster } from 'react-hot-toast';
+import AuthContextProvider from './context/authContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './Pages/AdminPages/Dashboard';
+import AdminNavbar from './components/AdminComponents/AdminNavbar';
+
 function App() {
+
+  
+
   return (
     <div>
-      <Toaster />
-      <AppNavbar />
-      <Routes>
-        <Route index element={<Home />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/contact" element={<Contact />} />
+      <AuthContextProvider>
+        <Toaster />
+        <AppNavbar />
+        <AdminNavbar />
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/contact" element={<Contact />} />
 
-        {/* 404 Page */}
-        <Route path="*" element={<Page404 />} />
-      </Routes>
+          {/* 404 Page */}
+          <Route path="*" element={<Page404 />} />
+
+          {/* Admin Pages */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthContextProvider>
     </div>
   );
 }
