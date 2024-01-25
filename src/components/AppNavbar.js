@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from '../axios';
-import { MdArrowBackIos, MdOutlineMenu } from 'react-icons/md'
-import { GoSearch } from 'react-icons/go'
+import { MdArrowBackIos, MdOutlineMenu, MdOutlineShoppingBag } from 'react-icons/md'
+import { GoBell, GoHeart, GoSearch } from 'react-icons/go'
 import { FaBars, FaThumbsUp } from 'react-icons/fa'
 import SideNav from './SideNav';
 import { FaHamburger } from 'react-icons/fa'
@@ -12,6 +12,7 @@ import { MdClose } from 'react-icons/md'
 const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Category', href: '/category' },
+    { name: 'Product', href: '/product' },
     { name: 'About Us', href: '/about' },
     { name: 'Contact', href: '/contact' },
 ]
@@ -100,11 +101,11 @@ const AppNavbar = () => {
 
     return (
         <div
-            className={`transition ease-in z-50 sticky top-0 duration-300 hover:bg-white ${navbackground && "bg-white"
+            className={`transition ease-in z-30 sticky top-0 duration-300 hover:bg-white ${navbackground && "bg-white"
                 } ${location.pathname === '/login' && 'hidden'} ${location.pathname === '/signup' && 'hidden'} ${location.pathname.includes('dashboard') && 'hidden'}`}
             onClick={handelNotification}
         >
-            <header className={`absolute inset-x-0 top-0 z-50 ${navbackground ? "bg-white" : "bg-transparent"}`}>
+            <header className={` inset-x-0 top-0 z-50 ${navbackground ? "bg-white" : "bg-transparent"}`}>
                 <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
                         <a href="#" className="-m-1.5 p-1.5">
@@ -140,30 +141,34 @@ const AppNavbar = () => {
                             {isAuthenticated ? (
                                 <div className="flex items-center">
                                     <div className="flex items-center mr-8 gap-4">
-                                        <div
+                                        <button
                                             onClick={notificationHandler}
                                             className="relative transform cursor-pointer hover:scale-110"
                                         >
-                                            <img src="/notification.png" />
+                                            {/* <img src="/notification.png" /> */}
+                                            <GoBell size={23} strokeWidth={0.5} />
+
                                             <div className="animate-ping w-2 h-2 rounded-full bg-red-400 border border-white absolute left-3 top-0" />
-                                        </div>
+                                        </button>
 
                                         <div className=" transform cursor-pointer hover:scale-110">
-                                            <Link to={"/favourite"}>
-                                                <img src="/heartoutline.png" />
-
+                                            <Link to={"/wishlist"}>
+                                                {/* <img src="/heartoutline.png" /> */}
+                                                <GoHeart size={23} strokeWidth={0.5} />
                                             </Link>
                                         </div>
 
-                                        <div className=" transform cursor-pointer hover:scale-110">
+                                        {/* <div className=" transform cursor-pointer hover:scale-110">
                                             <Link to={"/like"}>
                                                 <FaThumbsUp size={20} className="" />
                                             </Link>
-                                        </div>
+                                        </div> */}
 
                                         <div className=" transform cursor-pointer hover:scale-110">
                                             <Link to={"/cartpage"}>
-                                                <img src="/Cart.png" />
+                                                {/* <img src="/Cart.png" /> */}
+                                                <MdOutlineShoppingBag size={23} />
+
                                             </Link>
                                         </div>
                                     </div>
@@ -326,7 +331,7 @@ const AppNavbar = () => {
                                                     </div>
 
                                                     <div className=" transform cursor-pointer hover:scale-110">
-                                                        <Link to={"/favourite"}>
+                                                        <Link to={"/wishlist"}>
                                                             <img src="/heartoutline.png" />
 
                                                         </Link>

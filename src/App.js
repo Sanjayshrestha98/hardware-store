@@ -11,10 +11,15 @@ import AuthContextProvider from './context/authContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './Pages/AdminPages/Dashboard';
 import AdminNavbar from './components/AdminComponents/AdminNavbar';
+import SingleProduct from './Pages/Product/SingleProduct';
+import Category from './Pages/Category/Category';
+import AllProducts from './Pages/Product/AllProducts';
+import Cartpage from './Pages/Cartpage/Cartpage';
+import Wishlist from './Pages/Wishlist/Wishlist';
 
 function App() {
 
-  
+
 
   return (
     <div>
@@ -28,6 +33,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/category" element={<Category />} />
+
+          <Route path="/cartpage" element={<Cartpage />} />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/product" element={<AllProducts />} />
+          <Route path="/product/:id" element={<SingleProduct />} />
 
           {/* 404 Page */}
           <Route path="*" element={<Page404 />} />
