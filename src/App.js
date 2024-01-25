@@ -16,6 +16,7 @@ import Category from './Pages/Category/Category';
 import AllProducts from './Pages/Product/AllProducts';
 import Cartpage from './Pages/Cartpage/Cartpage';
 import Wishlist from './Pages/Wishlist/Wishlist';
+import ProtectedAdminRoute from './components/AdminComponents/ProtectedAdminRoute';
 
 function App() {
 
@@ -35,7 +36,18 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/category" element={<Category />} />
 
-          <Route path="/cartpage" element={<Cartpage />} />
+          {/* <Route path="/cartpage" element={<Cartpage />} /> */}
+
+          <Route
+            path="/cartpage"
+            element={
+              <ProtectedRoute>
+                <Cartpage />
+              </ProtectedRoute>
+            }
+          />
+
+
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/product" element={<AllProducts />} />
           <Route path="/product/:id" element={<SingleProduct />} />
@@ -47,9 +59,9 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoute>
                 <Dashboard />
-              </ProtectedRoute>
+              </ProtectedAdminRoute>
             }
           />
         </Routes>
