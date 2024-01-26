@@ -8,14 +8,8 @@ import { FaBars, FaThumbsUp } from 'react-icons/fa'
 import SideNav from './SideNav';
 import { FaHamburger } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
+import toast from 'react-hot-toast';
 
-const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Category', href: '/category' },
-    { name: 'Product', href: '/product' },
-    { name: 'About Us', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-]
 
 
 const AppNavbar = () => {
@@ -26,33 +20,45 @@ const AppNavbar = () => {
     const [toggleNav, setToggleNav] = useState(true);
     const [notificationModal, setNotificationModal] = useState(false);
     const [sideNav, setSideNav] = useState(false);
-
-    // const [showButton, setShowButton] = useState(false);
-
-    // const [userDetails, setUserDetails] = useState();
-
-    // const location = useLocation();
-
-    // console.log("userDetails", authUser.userDetails);
-
-    // useEffect(() => {
-    //   setUserDetails(authUser.userDetails);
-    //   console.log("Header", authUser.userDetails);
-    // }, [location.pathname]);
-
-    // let userDetails = authUser.userDetails;
+    const [categoryData, setCategoryData] = useState([])
 
     let isAuthenticated = authUser?.isAuthenticated;
 
-    // useEffect(() => {
-    //     window.addEventListener("scroll", () => {
-    //         if (window.pageYOffset > 600) {
-    //             setShowButton(true);
-    //         } else {
-    //             setShowButton(false);
-    //         }
-    //     });
-    // }, []);
+    const getAllCategory = async (values, actions) => {
+        try {
+            let result = await axios.get('/category', {
+                params: {
+                    search: "",
+                    page: 1,
+                    size: 50
+                }
+            })
+
+            if (result.data.success) {
+                setCategoryData(result.data.data)
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR.response.data.msg)
+        }
+    }
+
+    useEffect(() => {
+        getAllCategory()
+    }, [])
+
+    const navigation = [
+        { name: 'Home', href: '/' },
+        {
+            name: 'Category', href: '/category',
+            children: categoryData
+        },
+        { name: 'Product', href: '/product' },
+        { name: 'About Us', href: '/about' },
+        { name: 'Contact', href: '/contact' },
+    ]
+
+    console.log(navigation)
 
     const scrollToTop = () => {
         window.scrollTo({
@@ -127,13 +133,30 @@ const AppNavbar = () => {
                             <FaBars className="h-6 w-6" aria-hidden="true" />
                         </button>
                     </div>
-                    <div className="hidden lg:flex lg:gap-x-12">
+                    <div className="hidden lg:flex lg:gap-x-12 ">
                         {navigation.map((item, index) => (
-                            <a key={index} href={item.href} className={`text-sm hover:border-b-blue-700 px-3 hover:border-b-2 border-b-2 border-transparent py-2 font-normal ${location.pathname === item.href &&
-                                "border-b-2 border-b-blue-700"
-                                }`}>
-                                {item.name}
-                            </a>
+                            <>
+                                <div key={index} href={item.href} className={`relative text-sm group hover:border-b-blue-700 px-3 hover:border-b-2 border-b-2 border-transparent py-2 font-normal ${location.pathname === item.href &&
+                                    "border-b-2 border-b-blue-700 "
+                                    }`}>
+                                    {item.name}
+                                    {
+                                        item.children &&
+                                        <div className='hidden group-hover:block absolute pt-5 w-[150px] left-0'>
+                                            <ul>
+                                                {
+                                                    item.children.map((value, index) => (
+                                                        <li onClick={() => {
+
+                                                        }} role='button' className='p-2 border hover:bg-gray-50 bg-white'>{value.name}</li>
+                                                    ))}
+                                            </ul>
+
+                                        </div>
+
+                                    }
+                                </div>
+                            </>
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">

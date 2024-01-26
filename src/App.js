@@ -12,11 +12,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './Pages/AdminPages/Dashboard';
 import AdminNavbar from './components/AdminComponents/AdminNavbar';
 import SingleProduct from './Pages/Product/SingleProduct';
-import Category from './Pages/Category/Category';
 import AllProducts from './Pages/Product/AllProducts';
 import Cartpage from './Pages/Cartpage/Cartpage';
 import Wishlist from './Pages/Wishlist/Wishlist';
 import ProtectedAdminRoute from './components/AdminComponents/ProtectedAdminRoute';
+import Category from './Pages/AdminPages/Category/Category';
+import Product from './Pages/AdminPages/Product/Product';
+import User from './Pages/AdminPages/User/User';
 
 function App() {
 
@@ -34,7 +36,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/category" element={<Category />} />
 
           {/* <Route path="/cartpage" element={<Cartpage />} /> */}
 
@@ -61,6 +62,30 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <Dashboard />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/dashboard/products"
+            element={
+              <ProtectedAdminRoute>
+                <Product />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/dashboard/category"
+            element={
+              <ProtectedAdminRoute>
+                <Category />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/dashboard/users"
+            element={
+              <ProtectedAdminRoute>
+                <User />
               </ProtectedAdminRoute>
             }
           />

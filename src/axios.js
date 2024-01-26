@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// console.log("token", localStorage.getItem("user_token"));
+// console.log("token", localStorage.getItem("_hw_token"));
 
-const accessToken = localStorage.getItem("user_token");
+const accessToken = localStorage.getItem("_hw_token");
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URI,
@@ -13,7 +13,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
-  const token = localStorage.getItem("user_token");
+  const token = localStorage.getItem("_hw_token");
   config.headers.Authorization = token ? `Bearer ${token}` : "";
   return config;
 });

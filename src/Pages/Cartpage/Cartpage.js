@@ -4,30 +4,30 @@ function Cartpage() {
     return (
         <section className="py-12 ">
             <div className="max-w-7xl px-4 mx-auto">
-                <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5">
-                    <h1 class="text-4xl font-bold tracking-tight text-gray-900">Your Cart</h1>
+                <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5">
+                    <h1 className="text-4xl font-bold tracking-tight text-gray-900">Your Cart</h1>
                 </div>
 
                 <div className="flex md:flex-row flex-col gap-5 mt-5">
-                    <div class="pointer-events-auto  w-full">
-                        <div class="px-4 py-6 sm:pl-0">
-                            <ul role="list" class="-my-6 divide-y divide-gray-200">
-                                <li class="flex py-6">
-                                    <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                        <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center" />
+                    <div className="pointer-events-auto  w-full">
+                        <div className="px-4 py-6 sm:pl-0">
+                            <ul role="list" className="-my-6 divide-y divide-gray-200">
+                                <li className="flex py-6">
+                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                        <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." className="h-full w-full object-cover object-center" />
                                     </div>
 
-                                    <div class="ml-4 flex flex-1 flex-col">
+                                    <div className="ml-4 flex flex-1 flex-col">
                                         <div>
-                                            <div class="flex justify-between text-base font-medium text-gray-900">
+                                            <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <h3>
                                                     <a href="#">Throwback Hip Bag</a>
                                                 </h3>
-                                                <p class="ml-4">$90.00</p>
+                                                <p className="ml-4">$90.00</p>
                                             </div>
-                                            <p class="mt-1 text-sm text-gray-500">Salmon</p>
+                                            <p className="mt-1 text-sm text-gray-500">Salmon</p>
                                         </div>
-                                        <div class="flex flex-1 items-center mt-2 justify-between text-sm">
+                                        <div className="flex flex-1 items-center mt-2 justify-between text-sm">
                                             <div className=" flex items-center">
                                                 <div className=" rounded-sm flex gap-3 items-center bg-white">
                                                     <button className="p-2 cursor-pointer border rounded-full border-gray-200 text-gray-600 hover:text-red-400 hover:border-red-400  transition duration-200">
@@ -46,28 +46,28 @@ function Cartpage() {
                                                 </div>
                                             </div>
 
-                                            <div class="flex">
-                                                <button type="button" class="font-medium text-red-600 hover:text-red-500">Remove</button>
+                                            <div className="flex">
+                                                <button type="button" className="font-medium text-red-600 hover:text-red-500">Remove</button>
                                             </div>
                                         </div>
                                     </div>
                                 </li>
-                                <li class="flex py-6">
-                                    <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                        <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg" alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." class="h-full w-full object-cover object-center" />
+                                <li className="flex py-6">
+                                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                        <img src="https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg" alt="Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch." className="h-full w-full object-cover object-center" />
                                     </div>
 
-                                    <div class="ml-4 flex flex-1 flex-col">
+                                    <div className="ml-4 flex flex-1 flex-col">
                                         <div>
-                                            <div class="flex justify-between text-base font-medium text-gray-900">
+                                            <div className="flex justify-between text-base font-medium text-gray-900">
                                                 <h3>
                                                     <a href="#">Medium Stuff Satchel</a>
                                                 </h3>
-                                                <p class="ml-4">$32.00</p>
+                                                <p className="ml-4">$32.00</p>
                                             </div>
-                                            <p class="mt-1 text-sm text-gray-500">Blue</p>
+                                            <p className="mt-1 text-sm text-gray-500">Blue</p>
                                         </div>
-                                        <div class="flex flex-1 items-center mt-2 justify-between text-sm">
+                                        <div className="flex flex-1 items-center mt-2 justify-between text-sm">
                                             <div className=" flex items-center">
                                                 <div className=" rounded-sm flex gap-3 items-center bg-white">
                                                     <div className="p-2 cursor-pointer border rounded-full border-gray-200 text-gray-600 hover:text-red-400 hover:border-red-400 transition duration-200">
@@ -86,8 +86,8 @@ function Cartpage() {
                                                 </div>
                                             </div>
 
-                                            <div class="flex">
-                                                <button type="button" class="font-medium text-red-600 hover:text-red-500">Remove</button>
+                                            <div className="flex">
+                                                <button type="button" className="font-medium text-red-600 hover:text-red-500">Remove</button>
                                             </div>
                                         </div>
                                     </div>

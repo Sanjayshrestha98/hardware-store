@@ -11,8 +11,9 @@ const user = {
 }
 const navigation = [
   { name: 'dashboard', href: '/dashboard' },
-  { name: 'admins', href: '/dashboard/admins' },
+  { name: 'users', href: '/dashboard/users' },
   { name: 'products', href: '/dashboard/products' },
+  { name: 'category', href: '/dashboard/category' },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
@@ -40,7 +41,7 @@ export default function AdminNavbar() {
 
 
   return (
-    <div className={`min-h-full sticky top-0`}>
+    <div className={`min-h-full sticky top-0 mb-10` }>
       <div className="bg-gray-800">
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -104,8 +105,16 @@ export default function AdminNavbar() {
                       ))}
                       <div >
                         <button
+                          onClick={() => {
+                            localStorage.removeItem("_hw_token");
+                            localStorage.removeItem("_hw_userDetails");
+
+                            setTimeout(() => {
+                              window.location.href = "/login"
+                            }, 400)
+                          }}
                           className={
-                            'hover:bg-gray-100 block px-4 py-2 text-sm hover:text-gray-700'
+                            'hover:bg-gray-100 w-full text-left block px-4 py-2 text-sm hover:text-gray-700'
                           }
                         >
                           Sign Out
@@ -191,14 +200,16 @@ export default function AdminNavbar() {
         </>
       </div>
 
-      <header className="bg-white shadow">
+      {/* <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 ">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
         </div>
-      </header>
-      <main>
-        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{/* Your content */}</div>
-      </main>
+      </header> */}
+      {/* <main>
+        <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+          Content
+        </div>
+      </main> */}
     </div>
   )
 }

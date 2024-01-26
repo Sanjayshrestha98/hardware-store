@@ -3,7 +3,7 @@ import React from 'react'
 function Page404() {
   return (
     <div>
-        Page not found
+      <img src='/404Page.jpg' />
     </div>
   )
 }
