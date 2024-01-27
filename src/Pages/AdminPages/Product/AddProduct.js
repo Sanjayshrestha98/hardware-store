@@ -31,12 +31,12 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
 
   const imageData = new FormData
 
-  const handleImages = (size, color, files) => {
-
+  const handleImages = (variant_type, files) => {
     for (let i in files) {
       const file = files[i];
       if (file instanceof File) {
-        imageData.append(`${size}-${color}`, file);
+        const key = Object.values(variant_type[0]).filter(e=> e !== '' &&  e !== undefined).join('-')
+        imageData.append(key, file);
       }
     }
 
@@ -258,7 +258,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                                 </label>
                                 <input
                                   onChange={(e) => {
-                                    handleImages(value.variant_type[0].size, value.variant_type[0].color, e.target.files)
+                                    handleImages(value.variant_type, e.target.files)
                                   }}
                                   accept="image/*"
                                   multiple
