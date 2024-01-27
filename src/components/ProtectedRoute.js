@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
 
   const userRole = userDetails?.role;
 
-  if (userRole && (userRole.includes("user"))) {
+  if (userRole) {
     return children;
   }
 

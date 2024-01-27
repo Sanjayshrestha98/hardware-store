@@ -150,7 +150,7 @@ const AppNavbar = () => {
                                             {
                                                 item.children.map((value, index) => (
                                                     <li key={index} onClick={() => {
-
+                                                        navigate('/product', { state: { category: value.name } });
                                                     }} role='button' className='p-2 border hover:bg-gray-50 bg-white'>{value.name}</li>
                                                 ))}
                                         </ul>
@@ -166,15 +166,14 @@ const AppNavbar = () => {
                             {isAuthenticated ? (
                                 <div className="flex items-center">
                                     <div className="flex items-center mr-8 gap-4">
-                                        <button
+                                        {/* <button
                                             onClick={notificationHandler}
                                             className="relative transform cursor-pointer hover:scale-110"
                                         >
-                                            {/* <img src="/notification.png" /> */}
                                             <GoBell size={23} strokeWidth={0.5} />
 
                                             <div className="animate-ping w-2 h-2 rounded-full bg-red-400 border border-white absolute left-3 top-0" />
-                                        </button>
+                                        </button> */}
 
                                         <div className=" transform cursor-pointer hover:scale-110">
                                             <Link to={"/wishlist"}>
