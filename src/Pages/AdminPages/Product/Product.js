@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../../axios'
 import toast from 'react-hot-toast'
 import AddProduct from './AddProduct'
+import Swal from 'sweetalert2'
 
 
 function Product() {
@@ -31,7 +32,7 @@ function Product() {
 
       if (result.data.success) {
         setProductData(result.data.data)
-        
+
       } else toast.error('Failed')
     } catch (ERR) {
       console.log(ERR)
@@ -44,6 +45,32 @@ function Product() {
   useEffect(() => {
     getAllProduct()
   }, [])
+
+  const removeItem = async (id) => {
+    try {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Delete it!'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let result = await axios.delete('product/' + id)
+          if (result.data.success) {
+            getAllProduct()
+            toast.success('Deleted Successfully')
+          }
+        }
+      })
+
+    } catch (ERR) {
+      console.log(ERR)
+      toast.error(ERR.response.data.msg)
+    }
+  }
 
 
 
@@ -71,7 +98,7 @@ function Product() {
           <thead className='font-semibold border-b bg-gray-100'>
             <tr className='opacity-75'>
               <th className='p-3'>Name</th>
-              <th className='p-3'>Created Date</th>
+              <th className='p-3'>SKU</th>
               <th className='p-3'>Actions</th>
             </tr>
           </thead>
@@ -82,10 +109,12 @@ function Product() {
                 <p className='p-5 font-semibold text-red-800'>No Data</p> :
                 productData.map((value, index) => (
                   <tr key={index} className='border-b'>
-                    <td className='p-3'>{value?.name}</td>
-                    <td className='p-3'>{value?.name}</td>
+                    <td className='p-3'>{value?.product_name}</td>
+                    <td className='p-3'>{value?.product_sku}</td>
                     <td className='p-3 flex gap-2 flex-wrap max-w-fit'>
-                      <button className=''>Delete</button>
+                      <button className='' onClick={() => {
+                        removeItem(value._id)
+                      }}>Delete</button>
                       <button className=''>Edit</button>
                     </td>
                   </tr>

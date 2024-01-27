@@ -1,11 +1,41 @@
-import React from 'react'
+import axios from '../../axios'
+import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useParams } from 'react-router-dom'
 
 function SingleProduct() {
+
+    const { id } = useParams()
+    console.log(id)
+
+    const [productData, setProductData] = useState()
+    const [selectedVariantData, setSelectedVariantData] = useState()
+
+    const getProductDetail = async () => {
+        try {
+            let result = await axios.get('/product/' + id)
+
+            if (result.data.success) {
+                setProductData(result?.data?.data ? result?.data?.data : [])
+                setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR?.response?.data?.msg)
+        }
+    }
+
+    useEffect(() => {
+        getProductDetail()
+    }, [id])
+
+
+    console.log('selectedVariantData', selectedVariantData)
     return (
         <div>
             <div className="bg-white">
                 <div className="pt-6">
-                    <nav aria-label="Breadcrumb">
+                    {/* <nav aria-label="Breadcrumb">
                         <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                             <li>
                                 <div className="flex items-center">
@@ -28,35 +58,35 @@ function SingleProduct() {
                                 <a href="#" aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">Basic Tee 6-Pack</a>
                             </li>
                         </ol>
-                    </nav>
+                    </nav> */}
 
-                    <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-                        <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg" alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center"/>
-                        </div>
-                        <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-                            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                                <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg" alt="Model wearing plain black basic tee." className="h-full w-full object-cover object-center"/>
-                            </div>
-                            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                                <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg" alt="Model wearing plain gray basic tee." className="h-full w-full object-cover object-center"/>
-                            </div>
-                        </div>
-                        <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg" alt="Model wearing plain white basic tee." className="h-full w-full object-cover object-center"/>
-                        </div>
+                    <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-8 lg:px-8">
+                        {/* <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg" alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
+                        </div> */}
+                        {
+                            selectedVariantData?.images?.map((value, index) => (
+                                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg" key={index}>
+                                    <img src={`${process.env.REACT_APP_IMG_URI}${value}`} alt="Prod Img" className="h-full w-full object-cover object-center" />
+                                </div>
+                            ))
+                        }
+
+                        {/* <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+                            <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg" alt="Model wearing plain white basic tee." className="h-full w-full object-cover object-center" />
+                        </div> */}
                     </div>
 
                     <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
                         <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-                            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Basic Tee 6-Pack</h1>
+                            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl capitalize">{productData?.product_name}</h1>
                         </div>
 
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <h2 className="sr-only">Product information</h2>
-                            <p className="text-3xl tracking-tight text-gray-900">$192</p>
+                            <p className="text-3xl tracking-tight text-gray-900">Rs. {selectedVariantData?.price}</p>
 
-                            <div className="mt-6">
+                            {/* <div className="mt-6">
                                 <h3 className="sr-only">Reviews</h3>
                                 <div className="flex items-center">
                                     <div className="flex items-center">
@@ -79,7 +109,7 @@ function SingleProduct() {
                                     <p className="sr-only">4 out of 5 stars</p>
                                     <a href="#" className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">117 reviews</a>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <form className="mt-10">
                                 <div>
@@ -88,32 +118,23 @@ function SingleProduct() {
                                     <fieldset className="mt-4">
                                         <legend className="sr-only">Choose a color</legend>
                                         <div className="flex items-center space-x-3">
-                                            {/* <!--
-                                            Active and Checked: "ring ring-offset-1"
-                                            Not Active and Checked: "ring-2"
-                --> */}
+
                                             <label className="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ring-gray-400">
-                                                <input type="radio" name="color-choice" value="White" className="sr-only" aria-labelledby="color-choice-0-label"/>
-                                                    <span id="color-choice-0-label" className="sr-only">White</span>
-                                                    <span aria-hidden="true" className="h-8 w-8 bg-white rounded-full border border-black border-opacity-10"></span>
+                                                <input type="radio" name="color-choice" value="White" className="sr-only" aria-labelledby="color-choice-0-label" />
+                                                <span id="color-choice-0-label" className="sr-only">White</span>
+                                                <span aria-hidden="true" className="h-8 w-8 bg-white rounded-full border border-black border-opacity-10"></span>
                                             </label>
-                                            {/* <!--
-                                            Active and Checked: "ring ring-offset-1"
-                                            Not Active and Checked: "ring-2"
-                --> */}
+
                                             <label className="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ring-gray-400">
-                                                <input type="radio" name="color-choice" value="Gray" className="sr-only" aria-labelledby="color-choice-1-label"/>
-                                                    <span id="color-choice-1-label" className="sr-only">Gray</span>
-                                                    <span aria-hidden="true" className="h-8 w-8 bg-gray-200 rounded-full border border-black border-opacity-10"></span>
+                                                <input type="radio" name="color-choice" value="Gray" className="sr-only" aria-labelledby="color-choice-1-label" />
+                                                <span id="color-choice-1-label" className="sr-only">Gray</span>
+                                                <span aria-hidden="true" className="h-8 w-8 bg-gray-200 rounded-full border border-black border-opacity-10"></span>
                                             </label>
-                                            {/* <!--
-                                            Active and Checked: "ring ring-offset-1"
-                                            Not Active and Checked: "ring-2"
-                --> */}
+
                                             <label className="relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none ring-gray-900">
-                                                <input type="radio" name="color-choice" value="Black" className="sr-only" aria-labelledby="color-choice-2-label"/>
-                                                    <span id="color-choice-2-label" className="sr-only">Black</span>
-                                                    <span aria-hidden="true" className="h-8 w-8 bg-gray-900 rounded-full border border-black border-opacity-10"></span>
+                                                <input type="radio" name="color-choice" value="Black" className="sr-only" aria-labelledby="color-choice-2-label" />
+                                                <span id="color-choice-2-label" className="sr-only">Black</span>
+                                                <span aria-hidden="true" className="h-8 w-8 bg-gray-900 rounded-full border border-black border-opacity-10"></span>
                                             </label>
                                         </div>
                                     </fieldset>
@@ -123,34 +144,34 @@ function SingleProduct() {
                                 <div className="mt-10">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                                        <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Size guide</a>
+                                        {/* <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Size guide</a> */}
                                     </div>
 
                                     <fieldset className="mt-4">
                                         <legend className="sr-only">Choose a size</legend>
                                         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                                            {/* <!-- Active: "ring-2 ring-indigo-500" --> */}
-                                            <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-not-allowed bg-gray-50 text-gray-200">
-                                                <input type="radio" name="size-choice" value="XXS" disabled className="sr-only" aria-labelledby="size-choice-0-label"/>
-                                                    <span id="size-choice-0-label">XXS</span>
-                                                    <span aria-hidden="true" className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200">
-                                                        <svg className="absolute inset-0 h-full w-full stroke-2 text-gray-200" viewBox="0 0 100 100" preserveAspectRatio="none" stroke="currentColor">
-                                                            <line x1="0" y1="100" x2="100" y2="0" vector-effect="non-scaling-stroke" />
-                                                        </svg>
-                                                    </span>
-                                            </label>
-                                            {/* <!-- Active: "ring-2 ring-indigo-500" --> */}
-                                            <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-pointer bg-white text-gray-900 shadow-sm">
-                                                <input type="radio" name="size-choice" value="XS" className="sr-only" aria-labelledby="size-choice-1-label"/>
-                                                    <span id="size-choice-1-label">XS</span>
-                                                    {/* <!--
-                                                    Active: "border", Not Active: "border-2"
-                                                    Checked: "border-indigo-500", Not Checked: "border-transparent"
-                  --> */}
-                                                    <span className="pointer-events-none absolute -inset-px rounded-md" aria-hidden="true"></span>
-                                            </label>
-                                           
-                                           
+                                            {/* <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-not-allowed bg-gray-50 text-gray-200">
+                                                <input type="radio" name="size-choice" value="XXS" disabled className="sr-only" aria-labelledby="size-choice-0-label" />
+                                                <span id="size-choice-0-label">XXS</span>
+                                                <span aria-hidden="true" className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200">
+                                                    <svg className="absolute inset-0 h-full w-full stroke-2 text-gray-200" viewBox="0 0 100 100" preserveAspectRatio="none" stroke="currentColor">
+                                                        <line x1="0" y1="100" x2="100" y2="0" vector-effect="non-scaling-stroke" />
+                                                    </svg>
+                                                </span>
+                                            </label> */}
+
+                                            {
+                                                productData?.variant.map((value, index) => (
+                                                    <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-pointer bg-white text-gray-900 shadow-sm">
+                                                        <input type="radio" name="size-choice" value="XS" className="sr-only" aria-labelledby="size-choice-1-label" />
+                                                        <span id="size-choice-1-label">{value?.variant_type[0].size}</span>
+                                                        <span className="pointer-events-none absolute -inset-px rounded-md" aria-hidden="true"></span>
+                                                    </label>
+                                                ))
+                                            }
+
+
+
                                         </div>
                                     </fieldset>
                                 </div>
@@ -165,11 +186,12 @@ function SingleProduct() {
                                 <h3 className="sr-only">Description</h3>
 
                                 <div className="space-y-6">
-                                    <p className="text-base text-gray-900">The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: &quot;Black&quot;. Need to add an extra pop of color to your outfit? Our white tee has you covered.</p>
+                                    {/* <p className="text-base text-gray-900">The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: &quot;Black&quot;. Need to add an extra pop of color to your outfit? Our white tee has you covered.</p> */}
+                                    <p className="text-base text-gray-900">{productData?.description}</p>
                                 </div>
                             </div>
 
-                            <div className="mt-10">
+                            {/* <div className="mt-10">
                                 <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 
                                 <div className="mt-4">
@@ -180,15 +202,15 @@ function SingleProduct() {
                                         <li className="text-gray-400"><span className="text-gray-600">Ultra-soft 100% cotton</span></li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            <div className="mt-10">
+                            {/* <div className="mt-10">
                                 <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
                                 <div className="mt-4 space-y-6">
                                     <p className="text-sm text-gray-600">The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming &quot;Charcoal Gray&quot; limited release.</p>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

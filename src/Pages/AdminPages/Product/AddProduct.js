@@ -35,7 +35,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
     for (let i in files) {
       const file = files[i];
       if (file instanceof File) {
-        const key = Object.values(variant_type[0]).filter(e=> e !== '' &&  e !== undefined).join('-')
+        const key = Object.values(variant_type[0]).filter(e => e !== '' && e !== undefined).join('-')
         imageData.append(key, file);
       }
     }
@@ -167,8 +167,80 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                     className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <div>
+                  <label
+                    id="stock"
+                    className="block w-full text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Stock
+                  </label>
+                  <Field
+                    type="number"
+                    className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    name={`stock`} />
 
-                <div className='col-span-full'>
+                </div>
+                <div>
+                  <label
+                    id="price"
+                    className="block w-full text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Price
+                  </label>
+                  <Field
+                    className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    name={`price`} />
+
+                </div>
+                <div>
+                  <label
+                    id="size"
+                    className="block w-full text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Size
+                  </label>
+                  <Field
+                    className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    name={`size`} />
+
+                </div>
+                <div>
+                  <label
+                    id="color"
+                    className="block w-full text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Color
+                  </label>
+                  <Field
+                    // onChange={(e) => {
+                    //   props.handleChange(e)
+                    //   props.setFieldValue(`variant.${index}.sku`, `${value.variant_type[0].size}-${e.target.value}`)
+                    // }}
+                    className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    name={`color`} 
+                    
+                    />
+                </div>
+                <div>
+                  <label
+                    id="color"
+                    className="block w-full text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Images
+                  </label>
+                  <input
+                    // onChange={(e) => {
+                    //   handleImages(value.variant_type, e.target.files)
+                    // }}
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+
+
+                {/* <div className='col-span-full'>
                   <label
                     id="description"
                     className="block w-full text-sm font-medium leading-6 text-gray-900"
@@ -274,7 +346,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                                     className='bg-red-600 h-fit px-2 text-white rounded '
 
                                     type="button"
-                                    onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
+                                    onClick={() => arrayHelpers.remove(index)} 
                                   >
                                     -
                                   </button>
@@ -290,7 +362,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                                     size: "",
                                     color: ""
                                   }],
-                                })} // insert an empty string at a position
+                                })}
                               >
                                 +
                               </button>
@@ -298,14 +370,13 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                           ))
                         ) : (
                           <button type="button" onClick={() => arrayHelpers.push('')}>
-                            {/* show this when user has removed all variant_type from the list */}
-                            Add a friend
+                            Add a VAriant
                           </button>
                         )}
                       </div>
                     )}
                   />
-                </div>
+                </div> */}
 
 
               </div>
