@@ -29,6 +29,7 @@ function CheckoutPage({ modalIsOpen, closeModal, getRoute, cartData }) {
 
     return (
         <Modal
+        ariaHideApp={false}
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             contentLabel="Add Category Modal"

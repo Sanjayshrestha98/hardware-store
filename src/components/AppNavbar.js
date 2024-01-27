@@ -58,7 +58,6 @@ const AppNavbar = () => {
         { name: 'Contact', href: '/contact' },
     ]
 
-    console.log(navigation)
 
     const scrollToTop = () => {
         window.scrollTo({
@@ -118,8 +117,8 @@ const AppNavbar = () => {
                             <span className="sr-only">Your Company</span>
                             <img
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                alt=""
+                                src="/app_logo.png"
+                                alt="applogo"
                             />
                         </a>
                     </div>
@@ -150,7 +149,7 @@ const AppNavbar = () => {
                                             {
                                                 item.children.map((value, index) => (
                                                     <li key={index} onClick={() => {
-                                                        navigate('/product', { state: { category: value.name } });
+                                                        navigate('/product', { state: { category: value._id } });
                                                     }} role='button' className='p-2 border hover:bg-gray-50 bg-white'>{value.name}</li>
                                                 ))}
                                         </ul>
@@ -313,8 +312,8 @@ const AppNavbar = () => {
                                     <span className="sr-only">Your Company</span>
                                     <img
                                         className="h-8 w-auto"
-                                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                                        alt=""
+                                        src="/app_logo.png"
+                                        alt="applogo"
                                     />
                                 </a>
                                 <button

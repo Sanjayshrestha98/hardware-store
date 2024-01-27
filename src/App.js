@@ -20,6 +20,8 @@ import Category from './Pages/AdminPages/Category/Category';
 import Product from './Pages/AdminPages/Product/Product';
 import User from './Pages/AdminPages/User/User';
 import Profile from './Pages/Profile/Profile';
+import Footer from './components/Footer';
+import AboutPage from './Pages/AboutUs/AboutPage';
 
 function App() {
 
@@ -29,76 +31,83 @@ function App() {
     <div>
       <AuthContextProvider>
         <Toaster />
-        <AppNavbar />
-        <AdminNavbar />
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/contact" element={<Contact />} />
+        <div className='min-h-screen flex flex-col'>
+          <AppNavbar />
+          <AdminNavbar />
+          <div className='flex-1'>
+            <Routes>
+              <Route index element={<Home />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/about" element={<AboutPage />} />
 
-          {/* <Route path="/cartpage" element={<Cartpage />} /> */}
+              {/* <Route path="/cartpage" element={<Cartpage />} /> */}
 
 
-          <Route
-            path="/cartpage"
-            element={
-              <ProtectedRoute>
-                <Cartpage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
+              <Route
+                path="/cartpage"
+                element={
+                  <ProtectedRoute>
+                    <Cartpage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
-          <Route path="/wishlist" element={<Wishlist />} />
-          <Route path="/product" element={<AllProducts />} />
-          <Route path="/product/:id" element={<SingleProduct />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/product" element={<AllProducts />} />
+              <Route path="/product/:id" element={<SingleProduct />} />
 
-          {/* 404 Page */}
-          <Route path="*" element={<Page404 />} />
+              {/* 404 Page */}
+              <Route path="*" element={<Page404 />} />
 
-          {/* Admin Pages */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedAdminRoute>
-                <Dashboard />
-              </ProtectedAdminRoute>
-            }
-          />
-          <Route
-            path="/dashboard/products"
-            element={
-              <ProtectedAdminRoute>
-                <Product />
-              </ProtectedAdminRoute>
-            }
-          />
-          <Route
-            path="/dashboard/category"
-            element={
-              <ProtectedAdminRoute>
-                <Category />
-              </ProtectedAdminRoute>
-            }
-          />
-          <Route
-            path="/dashboard/users"
-            element={
-              <ProtectedAdminRoute>
-                <User />
-              </ProtectedAdminRoute>
-            }
-          />
-        </Routes>
+
+              {/* Admin Pages */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedAdminRoute>
+                    <Dashboard />
+                  </ProtectedAdminRoute>
+                }
+              />
+              <Route
+                path="/dashboard/products"
+                element={
+                  <ProtectedAdminRoute>
+                    <Product />
+                  </ProtectedAdminRoute>
+                }
+              />
+              <Route
+                path="/dashboard/category"
+                element={
+                  <ProtectedAdminRoute>
+                    <Category />
+                  </ProtectedAdminRoute>
+                }
+              />
+              <Route
+                path="/dashboard/users"
+                element={
+                  <ProtectedAdminRoute>
+                    <User />
+                  </ProtectedAdminRoute>
+                }
+              />
+            </Routes>
+          </div>
+          <Footer />
+        </div>
       </AuthContextProvider>
     </div>
   );

@@ -83,6 +83,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
 
   return (
     <Modal
+    ariaHideApp={false}
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
       contentLabel="Add Product Modal"

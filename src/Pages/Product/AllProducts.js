@@ -2,18 +2,19 @@ import axios from '../../axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FaFilter } from 'react-icons/fa'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 function AllProducts() {
     const [showFilter, setShowFilter] = useState()
+    const [priceFilter, setPriceFilter] = useState("")
+    const [dateFilter, setDateFilter] = useState("")
 
+    const navigate = useNavigate()
     const location = useLocation();
     const { category } = location.state || {};
-    console.log(category)
 
     const [categoryData, setCategoryData] = useState([])
     const [productData, setProductData] = useState([])
-
 
     const getAllCategory = async () => {
         try {
@@ -33,6 +34,7 @@ function AllProducts() {
             toast.error(ERR?.response?.data?.msg)
         }
     }
+
     const getAllProducts = async () => {
         try {
             let result = await axios.get('/product', {
@@ -40,7 +42,9 @@ function AllProducts() {
                     search: "",
                     page: 1,
                     size: 50,
-                    price: -1,
+                    price: priceFilter,
+                    category: category,
+                    date: dateFilter
                 }
             })
 
@@ -59,9 +63,13 @@ function AllProducts() {
 
     useEffect(() => {
         getAllProducts()
-    }, [category])
+    }, [category, priceFilter, dateFilter])
 
-    console.log('productData', productData)
+    const clearFilter = () => {
+        navigate('/product', { state: { category: "" } });
+
+    }
+
     return (
         <div className="bg-white">
             <div>
@@ -88,9 +96,9 @@ function AllProducts() {
                                 </div>
 
                                 {/* <!-- Filters --> */}
-                                <form className="lg:hidden block">
+                                <div className="lg:hidden block">
                                     <h3 className="sr-only">Categories</h3>
-                                    <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                    <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                                         <li>
                                             <a href="#" className="" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
                                         </li>
@@ -110,17 +118,17 @@ function AllProducts() {
 
                                     <div className="border-b border-gray-200 py-6">
                                         <h3 className="-my-3 flow-root">
-                                            <button type="button" className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
+                                            <div className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
                                                 <span className="font-medium text-gray-900">Category</span>
                                                 <span className="ml-6 flex items-center">
                                                     <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
                                                     </svg>
                                                     <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                        <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
+                                                        <path fillRule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clipRule="evenodd" />
                                                     </svg>
                                                 </span>
-                                            </button>
+                                            </div>
                                         </h3>
                                         <div className="pt-6" id="filter-section-1">
                                             <div className="space-y-4">
@@ -160,7 +168,7 @@ function AllProducts() {
                                             <input type='range' step={1} />
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,23 +188,33 @@ function AllProducts() {
 
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                             {/* <!-- Filters --> */}
-                            <form className="hidden lg:block">
-                                <h3 className="sr-only">Filters</h3>
-                                <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
-                                    <li>
-                                        <a href="#" className="" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
+                            <div className="hidden lg:block">
+                                <h3 className="p-2 mb-2 font-semibold">Filters</h3>
+                                <ul role="list" className="space-y-1 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                                    {/* <li className=''>
+                                        <button onClick={() => {
+                                            setPriceFilter(1)
+                                        }} className="">Most Popular</button>
+                                    </li> */}
+                                    <li role='button' onClick={() => {
+                                        setDateFilter(1)
+                                    }} className={`${dateFilter === 1 ? "bg-gray-50" : ""} p-2`}>
+                                        Oldest
                                     </li>
-                                    <li>
-                                        <a href="#" className="" role="menuitem" tabindex="-1" id="menu-item-1">Best Rating</a>
+                                    <li onClick={() => {
+                                        setDateFilter(-1)
+                                    }} role='button' className={`${dateFilter === -1 ? "bg-gray-50" : ""} p-2`} >
+                                        Newest
                                     </li>
-                                    <li>
-                                        <a href="#" className="" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
+                                    <li role='button' onClick={() => {
+                                        setPriceFilter(1)
+                                    }} className={`${priceFilter === 1 ? "bg-gray-50" : ""} p-2`}>
+                                        Price: Low to High
                                     </li>
-                                    <li>
-                                        <a href="#" className="" role="menuitem" tabindex="-1" id="menu-item-3">Price: Low to High</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" className="" role="menuitem" tabindex="-1" id="menu-item-4">Price: High to Low</a>
+                                    <li role='button' onClick={() => {
+                                        setPriceFilter(-1)
+                                    }} className={`${priceFilter === -1 ? "bg-gray-50" : ""} p-2`}>
+                                        Price: High to Low
                                     </li>
                                 </ul>
 
@@ -204,14 +222,19 @@ function AllProducts() {
                                     <h3 className="-my-3 flow-root">
                                         <button type="button" className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500" aria-controls="filter-section-1" aria-expanded="false">
                                             <span className="font-medium text-gray-900">Category</span>
-                                            <span className="ml-6 flex items-center">
-                                                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                                                </svg>
-                                                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                    <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
+                                            {
+                                                category &&
+                                                <button onClick={() => {
+                                                    clearFilter()
+                                                }} className='flex gap-2'>
+                                                    <span>Clear</span>
+                                                    <span className=" flex items-center rotate-45">
+                                                        <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                            <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                                                        </svg>
+                                                    </span>
+                                                </button>
+                                            }
                                         </button>
                                     </h3>
                                     <div className="pt-6" id="filter-section-1">
@@ -220,10 +243,12 @@ function AllProducts() {
                                             {
                                                 categoryData.map((value, index) => (
                                                     <div className="flex items-center">
-                                                        <input onChange={(e)=>{
-                                                            console.log(e.target.value)
-                                                        }} id="filter-category-0" checked={category === value.name} name={value.name} value={value._id} type="radio" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                                                        <label for="filter-category-0" className="ml-3 text-sm text-gray-600">{value.name}</label>
+                                                        <input onChange={(e) => {
+                                                            // console.log('e.target.value', e.target.value)
+                                                            // setSelectedCateogry(e.target.value)
+                                                            navigate('/product', { state: { category: value._id } });
+                                                        }} id={value._id} checked={category === value._id} name={value.name} value={value._id} type="radio" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                                        <label for={value._id} className="ml-3 text-sm text-gray-600">{value.name}</label>
                                                     </div>
                                                 ))
                                             }
@@ -242,7 +267,7 @@ function AllProducts() {
                                         <input type='range' step={1} />
                                     </div>
                                 </div> */}
-                            </form>
+                            </div>
                             <div className="lg:col-span-3 border-l">
                                 <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                                     <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
@@ -274,7 +299,7 @@ function AllProducts() {
                     </section>
                 </main>
             </div>
-        </div>
+        </div >
     )
 }
 

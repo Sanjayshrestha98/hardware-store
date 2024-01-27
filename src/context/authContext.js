@@ -11,12 +11,12 @@ const AuthContextProvider = ({ children }) => {
   const [authUser, setAuthUser] = useState();
   const [profileDetail, setProfileDetail] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userDetails, setUserDetails] = useState(() => localStorage.getItem('userDetails') ? localStorage.getItem('userDetails') : "");
+  const [userDetails, setUserDetails] = useState(() => localStorage.getItem('_hw_userDetails') ? JSON.parse(localStorage.getItem('_hw_userDetails')) : "");
 
   const token = localStorage.getItem('_hw_token')
 
   useEffect(() => {
-    setUserDetails(localStorage.getItem('_hw_userDetails'))
+    setUserDetails(JSON.parse(localStorage.getItem('_hw_userDetails')))
     if (token) {
       setIsAuthenticated(true)
     } else setIsAuthenticated(false)

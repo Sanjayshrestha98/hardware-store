@@ -24,6 +24,7 @@ function AddCatgeoryModal({ modalIsOpen, closeModal, getRoute }) {
 
     return (
         <Modal
+            ariaHideApp={false}
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             contentLabel="Add Category Modal"
@@ -63,15 +64,13 @@ function AddCatgeoryModal({ modalIsOpen, closeModal, getRoute }) {
                             <div className="mt-8 flex gap-4">
                                 <button
                                     type="submit"
-                                    role="button"
                                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 >
                                     Add
                                 </button>
                                 <button
                                     onClick={closeModal}
-                                    type="submit"
-                                    role="button"
+                                    type="button"
                                     className="flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-800 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 >
                                     Close

@@ -1,27 +1,19 @@
-import axios from '../../../axios'
-import { Field, Form, Formik } from 'formik'
-import React from 'react'
+import { Field, Form, Formik } from 'formik';
+import axios from '../../axios'
+import React, { useContext } from 'react'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
+import FieldError from '../../components/FieldError';
 import * as yup from 'yup';
-import FieldError from '../../../components/FieldError'
+import { AuthContext } from '../../context/authContext'
 
-function AddUser({ modalIsOpen, closeModal, getRoute }) {
+function EditProfile({ modalIsOpen, closeModal, getRoute, profileDetails }) {
 
-    const handleFormSubmit = async (values, actions) => {
-        try {
-            let result = await axios.post('/user/register', values)
 
-            if (result.data.success) {
-                toast.success('User Added Successfully')
-                closeModal()
-                getRoute()
-            } else toast.error('Failed')
-        } catch (ERR) {
-            console.log(ERR)
-            toast.error(ERR.response.data.msg)
-        }
-    }
+    const { userDetails } = useContext(AuthContext)
+
+    console.log('userDetails', userDetails)
+
 
     const validationSchema = yup.object({
         firstname: yup.string()
@@ -37,28 +29,51 @@ function AddUser({ modalIsOpen, closeModal, getRoute }) {
             .required('This Field is required'),
     });
 
+    const handleFormSubmit = async (values, actions) => {
+        try {
+            // Make an Axios POST request
+            const response = await axios.put('/user/update-profile/' + userDetails?._id, values);
+
+            if (response.data.success) {
+                toast.success('Editing Successfull')
+                getRoute()
+                closeModal()
+            }
+
+            // Handle the response as needed (e.g., redirect, show a success message)
+        } catch (error) {
+            // Handle errors (e.g., show an error message)
+            console.error('Error submitting form:', error);
+            toast.error(error.response.data.msg)
+        }
+    };
+
+
     return (
         <Modal
-        ariaHideApp={false}
+            ariaHideApp={false}
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
-            contentLabel="Add User Modal"
+            contentLabel="Add Category Modal"
             overlayClassName="Overlay"
             className="Modal rounded-md p-5 md:w-1/4 max-h-screen overflow-auto"
         >
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Add User</h1>
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                    Change Profile Details
+                </h2>
+            </div>
 
-            <div className='mt-4'>
+            <div className="mt-10 ">
+
                 <Formik
                     enableReinitialize
                     initialValues={{
-                        firstname: "",
-                        lastname: "",
-                        email: "",
-                        contact: "",
-                        address: "",
-                        password: "password",
-                        // role:'super-admin',
+                        firstname: profileDetails?.firstname,
+                        lastname: profileDetails?.lastname,
+                        email: profileDetails?.email,
+                        contact: profileDetails?.contact,
+                        address: profileDetails?.address,
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
@@ -169,10 +184,11 @@ function AddUser({ modalIsOpen, closeModal, getRoute }) {
                         </Form>
                     )}
                 </Formik>
+
             </div>
 
         </Modal>
     )
 }
 
-export default AddUser
+export default EditProfile

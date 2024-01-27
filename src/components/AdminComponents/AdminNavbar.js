@@ -39,9 +39,8 @@ export default function AdminNavbar() {
     }, 400)
   };
 
-
   return (
-    <div className={`min-h-full sticky top-0 mb-10` }>
+    <div className={`min-h-full sticky top-0 mb-10`}>
       <div className="bg-gray-800">
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -50,8 +49,8 @@ export default function AdminNavbar() {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
+                    src="/app_logo.png"
+                    alt="applog"
                   />
                 </div>
                 <div className="hidden md:block">
