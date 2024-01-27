@@ -19,6 +19,7 @@ import ProtectedAdminRoute from './components/AdminComponents/ProtectedAdminRout
 import Category from './Pages/AdminPages/Category/Category';
 import Product from './Pages/AdminPages/Product/Product';
 import User from './Pages/AdminPages/User/User';
+import Profile from './Pages/Profile/Profile';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
 
           {/* <Route path="/cartpage" element={<Cartpage />} /> */}
 
+
           <Route
             path="/cartpage"
             element={
@@ -47,7 +49,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/product" element={<AllProducts />} />

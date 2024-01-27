@@ -67,7 +67,7 @@ function Wishlist() {
                                             wishlistData?.map((value, index) => (
                                                 <li className="flex py-6" key={index}>
                                                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                                        <img src={`${process.env.REACT_APP_IMG_URI}${value?.product?.images[0]}`} alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." className="h-full w-full object-cover object-center" />
+                                                        <img src={`${process.env.REACT_APP_IMG_URI}${value?.product?.images[0]}`} alt="Wishlist product." className="h-full w-full object-cover object-center" />
                                                     </div>
 
                                                     <div className="ml-4 flex flex-1 flex-col">

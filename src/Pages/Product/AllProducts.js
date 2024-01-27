@@ -220,7 +220,9 @@ function AllProducts() {
                                             {
                                                 categoryData.map((value, index) => (
                                                     <div className="flex items-center">
-                                                        <input id="filter-category-0" checked={category === value.name} name={value.name} value="new-arrivals" type="radio" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
+                                                        <input onChange={(e)=>{
+                                                            console.log(e.target.value)
+                                                        }} id="filter-category-0" checked={category === value.name} name={value.name} value={value._id} type="radio" className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                                                         <label for="filter-category-0" className="ml-3 text-sm text-gray-600">{value.name}</label>
                                                     </div>
                                                 ))

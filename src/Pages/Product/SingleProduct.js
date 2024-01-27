@@ -27,10 +27,14 @@ function SingleProduct() {
     }
     const addToCart = async () => {
         try {
-            let result = await axios.get('/product/' + id)
+            let result = await axios.post('/cart/add/', {
+                item: productData?._id,
+                quantity: 1
+            })
 
             if (result.data.success) {
-                setProductData(result?.data?.data ? result?.data?.data : [])
+                toast.success('Added To Cart')
+                // setProductData(result?.data?.data ? result?.data?.data : [])
                 // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
             } else toast.error('Failed')
         } catch (ERR) {
@@ -203,7 +207,11 @@ function SingleProduct() {
 
                             </form> */}
                             <div className='flex flex-wrap gap-3'>
-                                <button type="button" className="mt-5 flex flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to Cart</button>
+                                <button type="button"
+                                    onClick={() => {
+                                        addToCart()
+                                    }}
+                                    className="mt-5 flex flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to Cart</button>
                                 <button type="button"
                                     onClick={() => {
                                         addToWishlist()
