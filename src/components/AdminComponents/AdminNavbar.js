@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useContext, useState } from 'react'
 import { FaBars, FaBell } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
 import { Link, useLocation } from 'react-router-dom'
+import { AuthContext } from '../../context/authContext'
 
 const user = {
   name: 'Tom Cook',
@@ -16,15 +17,15 @@ const navigation = [
   { name: 'category', href: '/dashboard/category' },
 ]
 const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
+  { name: 'Your Profile', href: '/profile' },
 ]
 
 export default function AdminNavbar() {
 
   const [open, setOpen] = useState(false)
-
   const location = useLocation()
+
+  const authUser = useContext(AuthContext)
 
   if (!location.pathname.includes("/dashboard")) {
     return
@@ -73,22 +74,34 @@ export default function AdminNavbar() {
               </div>
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
-                  <button
+                  {/* <button
                     type="button"
                     className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">View notifications</span>
                     <FaBell className="h-6 w-6" aria-hidden="true" />
-                  </button>
+                  </button> */}
 
                   {/* Profile dropdown */}
                   <div className="relative ml-3 group">
-                    <button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    {/* <button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">Open user menu</span>
                       <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
-                    </button>
+                    </button> */}
+                    {authUser?.userDetails?.image ? (
+                      <img
+                        className="w-7 rounded-full object-cover object-center sm:w-8 md:w-8 h-7"
+                        src={`${process.env.REACT_APP_IMG_URI}${authUser?.userDetails?.image}`}
+                        alt="user photo"
+                      />
+                    ) : (
+                      <img
+                        className="w-7 rounded-full object-cover object-center sm:w-8 md:w-7 h-7 border"
+                        src="/defaultUserImage.png"
+                        alt="user photo"
+                      />)}
                     <div className='absolute bg-transparent shadow w-40 bg-white right-0 z-10 group-hover:block hidden min-w-max'>
                       {userNavigation.map((item) => (
                         <div key={item.name}>
@@ -162,20 +175,32 @@ export default function AdminNavbar() {
             <div className="border-t border-gray-700 pb-3 pt-4">
               <div className="flex items-center px-5">
                 <div className="flex-shrink-0">
-                  <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                  {authUser?.userDetails?.image ? (
+                    <img
+                      className="w-7 rounded-full object-cover object-center sm:w-8 md:w-8 h-7"
+                      src={`${process.env.REACT_APP_IMG_URI}${authUser?.userDetails?.image}`}
+                      alt="user photo"
+                    />
+                  ) : (
+                    <img
+                      className="w-7 rounded-full object-cover object-center sm:w-8 md:w-7 h-7 border"
+                      src="/defaultUserImage.png"
+                      alt="user photo"
+                    />
+                  )}
                 </div>
                 <div className="ml-3">
                   <div className="text-base font-medium leading-none text-white">{user.name}</div>
                   <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
                 </div>
-                <button
+                {/* <button
                   type="button"
                   className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
                   <FaBell className="h-6 w-6" aria-hidden="true" />
-                </button>
+                </button> */}
               </div>
               <div className="mt-3 space-y-1 px-2">
                 {userNavigation.map((item) => (
@@ -189,6 +214,9 @@ export default function AdminNavbar() {
                   </button>
                 ))}
                 <button
+                  onClick={() => {
+                    logout()
+                  }}
                   className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                 >
                   Sign Out

@@ -4,19 +4,20 @@ import axios from '../../../axios'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'
+import EditUser from './EditUser'
 
 function User() {
 
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [userData, setUserData] = useState([])
+    const [selectedUserData, setSelectedUserData] = useState([])
 
     const [totalUserCount, setTotalUserCount] = useState(0)
     const [currentUserPage, setCurrentUserPage] = useState(1)
     const [totalUserPage, setTotalUserPage] = useState(1)
-    const [userPageSize, setUserPageSize] = useState(1)
+    const [userPageSize, setUserPageSize] = useState(10)
     const [keyword, setKeyword] = useState("")
-
-    console.log('totalUserPage', totalUserPage)
 
     const removeItem = async (id) => {
         try {
@@ -51,11 +52,18 @@ function User() {
         setIsAddModalOpen(true)
     }
 
+    const closeEditModal = () => {
+        setIsEditModalOpen(false)
+    }
+    const openEditModal = () => {
+        setIsEditModalOpen(true)
+    }
+
     const getAllUser = async () => {
         try {
             let result = await axios.get('/user/all', {
                 params: {
-                    search: "",
+                    search: keyword,
                     page: currentUserPage,
                     size: userPageSize
                 }
@@ -90,6 +98,13 @@ function User() {
                 />
 
             }
+            {
+                isEditModalOpen &&
+                <EditUser closeModal={closeEditModal} modalIsOpen={isEditModalOpen}
+                    getRoute={getAllUser} profileDetails={selectedUserData}
+                />
+
+            }
 
             <div className="flex items-baseline justify-between  pb-6 pt-5">
                 <h1 className="text-4xl font-bold tracking-tight text-gray-900">Users</h1>
@@ -97,7 +112,12 @@ function User() {
                     openAddModal()
                 }} className='bg-blue-800 p-3 rounded-md text-white font-semibold px-4'>Add User</button>
             </div>
-
+            <div>
+                <input className='border p-2' type='string' placeholder='Search' onChange={(e) => {
+                    setKeyword(e.target.value)
+                    setCurrentUserPage(1)
+                }} />
+            </div>
             <div className='w-full my-5  bg-white'>
                 <table className="table-auto w-full text-left ">
                     <thead className='font-semibold border-b bg-gray-100'>
@@ -125,7 +145,10 @@ function User() {
                                             <button className='bg-red-700 text-white p-2 rounded' onClick={() => {
                                                 removeItem(value._id)
                                             }}><FaTrashAlt /></button>
-                                            <button className='bg-blue-700 text-white p-2 rounded'>
+                                            <button onClick={() => {
+                                                setSelectedUserData(value)
+                                                openEditModal()
+                                            }} className='bg-blue-700 text-white p-2 rounded'>
                                                 <FaEdit />
                                             </button>
                                         </td>
@@ -148,7 +171,7 @@ function User() {
                         </div>
                         <div className='flex flex-wrap items-center gap-3'>
                             <label>Showing</label>
-                            <select className='border rounded py-1' onChange={(e) => {
+                            <select defaultValue={userPageSize} className='border rounded py-1' onChange={(e) => {
                                 setCurrentUserPage(1)
                                 setUserPageSize(e.target.value)
                             }}>

@@ -20,7 +20,7 @@ const AuthContextProvider = ({ children }) => {
     if (token) {
       setIsAuthenticated(true)
     } else setIsAuthenticated(false)
-  }, [])
+  }, [localStorage.getItem('_hw_userDetails')])
 
 
   // const checkUser = async () => {

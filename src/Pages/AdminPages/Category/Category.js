@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AddCatgeoryModal from './AddCatgeoryModal'
+import EditCategoryModal from './EditCategoryModal'
 import axios from '../../../axios'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
@@ -8,15 +9,16 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa'
 function Category() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [categoryData, setCategoryData] = useState([])
+  const [selectedCategoryData, setSelectedCategoryData] = useState([])
 
   const [totalCategoryCount, setTotalCategoryCount] = useState(0)
   const [currentCategoryPage, setCurrentCategoryPage] = useState(1)
   const [totalCategoryPage, setTotalCategoryPage] = useState(1)
-  const [categoryPageSize, setCategoryPageSize] = useState(1)
+  const [categoryPageSize, setCategoryPageSize] = useState(10)
   const [keyword, setKeyword] = useState("")
 
-  console.log('totalCategoryPage', totalCategoryPage)
 
   const removeItem = async (id) => {
     try {
@@ -50,12 +52,18 @@ function Category() {
   const openAddModal = () => {
     setIsAddModalOpen(true)
   }
+  const closeEditModal = () => {
+    setIsEditModalOpen(false)
+  }
+  const openEditModal = () => {
+    setIsEditModalOpen(true)
+  }
 
   const getAllCategory = async (values, actions) => {
     try {
       let result = await axios.get('/category', {
         params: {
-          search: "",
+          search: keyword,
           page: currentCategoryPage,
           size: categoryPageSize
         }
@@ -72,8 +80,6 @@ function Category() {
     }
   }
 
-  console.log(categoryData)
-
   useEffect(() => {
     getAllCategory()
   }, [keyword, currentCategoryPage, categoryPageSize])
@@ -89,12 +95,27 @@ function Category() {
         />
 
       }
+      {
+        isEditModalOpen &&
+
+        <EditCategoryModal closeModal={closeEditModal} modalIsOpen={isEditModalOpen}
+          getRoute={getAllCategory} categoryData={selectedCategoryData}
+        />
+
+      }
 
       <div className="flex items-baseline justify-between  pb-6 pt-5">
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">Category</h1>
         <button onClick={() => {
           openAddModal()
         }} className='bg-blue-800 p-3 rounded-md text-white font-semibold px-4'>Add Category</button>
+      </div>
+
+      <div>
+        <input className='border p-2' type='string' placeholder='Search' onChange={(e) => {
+          setKeyword(e.target.value)
+          setCurrentCategoryPage(1)
+        }} />
       </div>
 
       <div className='w-full my-5  bg-white'>
@@ -119,7 +140,10 @@ function Category() {
                       <button className='bg-red-700 text-white p-2 rounded' onClick={() => {
                         removeItem(value._id)
                       }}><FaTrashAlt /></button>
-                      <button className='bg-blue-700 text-white p-2 rounded'>
+                      <button onClick={() => {
+                        setSelectedCategoryData(value)
+                        openEditModal()
+                      }} className='bg-blue-700 text-white p-2 rounded'>
                         <FaEdit />
                       </button>
                     </td>
@@ -142,7 +166,7 @@ function Category() {
             </div>
             <div className='flex flex-wrap items-center gap-3'>
               <label>Showing</label>
-              <select className='border rounded py-1' onChange={(e) => {
+              <select defaultValue={categoryPageSize} className='border rounded py-1' onChange={(e) => {
                 setCurrentCategoryPage(1)
                 setCategoryPageSize(e.target.value)
               }}>

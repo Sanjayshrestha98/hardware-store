@@ -208,7 +208,7 @@ const AppNavbar = () => {
                                                     {authUser.userDetails?.image ? (
                                                         <img
                                                             className="w-7 rounded-full object-cover object-center sm:w-8 md:w-8 h-7"
-                                                            src={`${process.env.REACT_APP_BASE_URI}${authUser.userDetails?.image}`}
+                                                            src={`${process.env.REACT_APP_IMG_URI}${authUser.userDetails?.image}`}
                                                             alt="user photo"
                                                         />
                                                     ) : (

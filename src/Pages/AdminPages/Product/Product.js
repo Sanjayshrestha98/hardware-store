@@ -4,15 +4,20 @@ import toast from 'react-hot-toast'
 import AddProduct from './AddProduct'
 import Swal from 'sweetalert2'
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'
+import EditProduct from './EditProduct'
 
 
 function Product() {
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [productData, setProductData] = useState([])
+  const [selectedProductData, setSelectedProductData] = useState([])
   const [totalProductCount, setTotalProductCount] = useState(0)
   const [currentProductPage, setCurrentProductPage] = useState(1)
   const [totalProductPage, setTotalProductPage] = useState(1)
+  const [productPageSize, setProductPageSize] = useState(10)
+  const [keyword, setKeyword] = useState("")
 
   const closeAddModal = () => {
     setIsAddModalOpen(false)
@@ -20,19 +25,27 @@ function Product() {
   const openAddModal = () => {
     setIsAddModalOpen(true)
   }
+  const closeEditModal = () => {
+    setIsEditModalOpen(false)
+  }
+  const openEditModal = () => {
+    setIsEditModalOpen(true)
+  }
 
-  const getAllProduct = async (values, actions) => {
+  const getAllProduct = async () => {
     try {
       let result = await axios.get('/product', {
         params: {
-          search: "",
-          page: 1,
-          limit: 10
+          search: keyword,
+          page: currentProductPage,
+          size: productPageSize
         }
       })
 
       if (result.data.success) {
         setProductData(result.data.data)
+        setTotalProductCount(result.data.totalCount)
+        setTotalProductPage(Math.ceil(result.data.totalCount / productPageSize))
 
       } else toast.error('Failed')
     } catch (ERR) {
@@ -45,7 +58,7 @@ function Product() {
 
   useEffect(() => {
     getAllProduct()
-  }, [])
+  }, [keyword, currentProductPage, productPageSize])
 
   const removeItem = async (id) => {
     try {
@@ -83,6 +96,14 @@ function Product() {
         <AddProduct closeModal={closeAddModal} modalIsOpen={isAddModalOpen}
           getRoute={getAllProduct}
         />
+      }
+
+      {
+        isEditModalOpen &&
+
+        <EditProduct closeModal={closeEditModal} modalIsOpen={isEditModalOpen}
+          getRoute={getAllProduct} productData={selectedProductData}
+        />
 
       }
 
@@ -92,13 +113,21 @@ function Product() {
           openAddModal()
         }} className='bg-blue-800 p-3 rounded-md text-white font-semibold px-4'>Add Product</button>
       </div>
-
+      <div>
+        <input className='border p-2' type='string' placeholder='Search' onChange={(e) => {
+          setKeyword(e.target.value)
+          setCurrentProductPage(1)
+        }} />
+      </div>
       <div className='w-full my-5  bg-white'>
         <table className="table-auto w-full text-left ">
           <thead className='font-semibold border-b bg-gray-100'>
             <tr className='opacity-75'>
               <th className='p-3'>Name</th>
               <th className='p-3'>SKU</th>
+              <th className='p-3'>Stock</th>
+              <th className='p-3'>Category</th>
+              <th className='p-3'>Price</th>
               <th className='p-3'>Actions</th>
             </tr>
           </thead>
@@ -111,11 +140,17 @@ function Product() {
                   <tr key={index} className='border-b'>
                     <td className='p-3'>{value?.product_name}</td>
                     <td className='p-3'>{value?.product_sku}</td>
+                    <td className='p-3'>{value?.stock}</td>
+                    <td className='p-3'>{value?.category?.name}</td>
+                    <td className='p-3'>Rs. {value?.price}</td>
                     <td className='p-3 flex gap-2 flex-wrap max-w-fit'>
                       <button className='bg-red-700 text-white p-2 rounded' onClick={() => {
                         removeItem(value._id)
                       }}><FaTrashAlt /></button>
-                      <button className='bg-blue-700 text-white p-2 rounded'>
+                      <button onClick={() => {
+                        setSelectedProductData(value)
+                        openEditModal()
+                      }} className='bg-blue-700 text-white p-2 rounded'>
                         <FaEdit />
                       </button>
                     </td>
@@ -132,29 +167,47 @@ function Product() {
           </div>
           <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div className='text-sm text-gray-700'>
-              <p className="">
+              <p className="font-semibold">
                 {totalProductCount} Total Results
               </p>
             </div>
-            <div>
+            <div className='flex flex-wrap items-center gap-3'>
+              <label>Showing</label>
+              <select defaultValue={productPageSize} className='border rounded py-1' onChange={(e) => {
+                setCurrentProductPage(1)
+                setProductPageSize(e.target.value)
+              }}>
+                <option>1</option>
+                <option>5</option>
+                <option>10</option>
+                <option>20</option>
+              </select>
               <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                <a href="#" className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <button
+                  disabled={currentProductPage === 1}
+                  onClick={() => {
+                    setCurrentProductPage(currentProductPage - 1)
+                  }} className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                   <span className="sr-only">Previous</span>
                   <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
                   </svg>
-                </a>
+                </button>
 
                 <a className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                   Page {currentProductPage} of {totalProductPage}
                 </a>
 
-                <a href="#" className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                <button
+                  disabled={currentProductPage === totalProductPage}
+                  onClick={() => {
+                    setCurrentProductPage(currentProductPage + 1)
+                  }} className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                   <span className="sr-only">Next</span>
                   <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
                   </svg>
-                </a>
+                </button>
               </nav>
             </div>
           </div>

@@ -1,18 +1,13 @@
 import { Field, Form, Formik } from 'formik';
-import axios from '../../axios'
+import axios from '../../../axios'
 import React, { useContext } from 'react'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
-import FieldError from '../../components/FieldError';
+import FieldError from '../../../components/FieldError';
 import * as yup from 'yup';
-import { AuthContext } from '../../context/authContext'
+import { AuthContext } from '../../../context/authContext'
 
-function EditProfile({ modalIsOpen, closeModal, getRoute, profileDetails }) {
-
-
-    const { userDetails } = useContext(AuthContext)
-
-    console.log('userDetails', userDetails)
+function EditUser({ modalIsOpen, closeModal, getRoute, profileDetails }) {
 
 
     const validationSchema = yup.object({
@@ -32,14 +27,12 @@ function EditProfile({ modalIsOpen, closeModal, getRoute, profileDetails }) {
     const handleFormSubmit = async (values, actions) => {
         try {
             // Make an Axios POST request
-            const response = await axios.put('/user/update-profile/' + userDetails?._id, values);
+            const response = await axios.put('/user/update-profile/' + profileDetails?._id, values);
 
             if (response.data.success) {
                 toast.success('Editing Successfull')
                 getRoute()
                 closeModal()
-
-                
             }
 
             // Handle the response as needed (e.g., redirect, show a success message)
@@ -56,7 +49,7 @@ function EditProfile({ modalIsOpen, closeModal, getRoute, profileDetails }) {
             ariaHideApp={false}
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
-            contentLabel="Add Category Modal"
+            contentLabel="Edit Category Modal"
             overlayClassName="Overlay"
             className="Modal rounded-md p-5 md:w-1/4 max-h-screen overflow-auto"
         >
@@ -173,21 +166,12 @@ function EditProfile({ modalIsOpen, closeModal, getRoute, profileDetails }) {
 
                             </div>
 
-                            <div className='col-span-full mt-4 flex gap-3'>
+                            <div className='col-span-full mt-4'>
                                 <button
                                     type="submit"
                                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 px-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 >
-                                    Submit
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        closeModal()
-                                    }}
-                                    type="button"
-                                    className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                >
-                                    Close
+                                    Register
                                 </button>
                             </div>
 
@@ -202,4 +186,4 @@ function EditProfile({ modalIsOpen, closeModal, getRoute, profileDetails }) {
     )
 }
 
-export default EditProfile
+export default EditUser

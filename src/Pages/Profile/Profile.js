@@ -1,13 +1,14 @@
 import axios from '../../axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import EditProfile from './EditProfile'
 import toast from 'react-hot-toast'
+import { AuthContext } from '../../context/authContext'
 
 function Profile() {
 
     const [profileDetails, setProfileDetails] = useState([])
     const [editProfile, setEditProfile] = useState()
-
+    const { userDetails, setUserDetails } = useContext(AuthContext)
 
     const openEditProfile = () => {
         setEditProfile(true)
@@ -23,7 +24,6 @@ function Profile() {
         try {
             let result = await axios.get('/user/my-profile/')
             if (result.data.success) {
-                console.log(result.data.data)
                 setProfileDetails(result.data.data)
 
             }
@@ -40,9 +40,14 @@ function Profile() {
                 formData.append('image', img)
                 let result = await axios.put('/user/upload-pp', formData)
                 if (result.data.success) {
-                    console.log(result.data.data)
                     toast.success('Image Uploaded')
+                    const localData = JSON.parse(localStorage.getItem('_hw_userDetails'))
+                    localData.image = result.data?.data?.image
+                    localStorage.setItem('_hw_userDetails', JSON.stringify(localData))
                     getProfileDetails()
+                    userDetails.image = result.data?.data?.image
+                    // setUserDetails(newdata)
+                    setUserDetails(userDetails)
                 }
             }
         } catch (ERR) {
