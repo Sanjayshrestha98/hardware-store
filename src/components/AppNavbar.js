@@ -24,7 +24,7 @@ const AppNavbar = () => {
 
     let isAuthenticated = authUser?.isAuthenticated;
 
-    const getAllCategory = async (values, actions) => {
+    const getAllCategory = async () => {
         try {
             let result = await axios.get('/category', {
                 params: {
@@ -35,11 +35,11 @@ const AppNavbar = () => {
             })
 
             if (result.data.success) {
-                setCategoryData(result.data.data)
+                setCategoryData(result?.data?.data ? result?.data?.data : [])
             } else toast.error('Failed')
         } catch (ERR) {
             console.log(ERR)
-            toast.error(ERR.response.data.msg)
+            toast.error(ERR?.response?.data?.msg)
         }
     }
 
@@ -51,7 +51,7 @@ const AppNavbar = () => {
         { name: 'Home', href: '/' },
         {
             name: 'Category', href: '/category',
-            children: categoryData
+            children: categoryData ? categoryData : []
         },
         { name: 'Product', href: '/product' },
         { name: 'About Us', href: '/about' },
@@ -135,28 +135,30 @@ const AppNavbar = () => {
                     </div>
                     <div className="hidden lg:flex lg:gap-x-12 ">
                         {navigation.map((item, index) => (
-                            <>
-                                <div key={index} href={item.href} className={`relative text-sm group hover:border-b-blue-700 px-3 hover:border-b-2 border-b-2 border-transparent py-2 font-normal ${location.pathname === item.href &&
-                                    "border-b-2 border-b-blue-700 "
-                                    }`}>
-                                    {item.name}
-                                    {
-                                        item.children &&
-                                        <div className='hidden group-hover:block absolute pt-5 w-[150px] left-0'>
-                                            <ul>
-                                                {
-                                                    item.children.map((value, index) => (
-                                                        <li onClick={() => {
+                            <div role='button' key={index} onClick={() => {
+                                if (!item.children) {
+                                    navigate(item.href)
+                                }
+                            }} href={item.href} className={`relative text-sm group hover:border-b-blue-700 px-3 hover:border-b-2 border-b-2 border-transparent py-2 font-normal ${location.pathname === item.href &&
+                                "border-b-2 border-b-blue-700 "
+                                }`}>
+                                {item.name}
+                                {
+                                    item.children &&
+                                    <div className='hidden group-hover:block absolute pt-5 w-[150px] left-0'>
+                                        <ul>
+                                            {
+                                                item.children.map((value, index) => (
+                                                    <li key={index} onClick={() => {
 
-                                                        }} role='button' className='p-2 border hover:bg-gray-50 bg-white'>{value.name}</li>
-                                                    ))}
-                                            </ul>
+                                                    }} role='button' className='p-2 border hover:bg-gray-50 bg-white'>{value.name}</li>
+                                                ))}
+                                        </ul>
 
-                                        </div>
+                                    </div>
 
-                                    }
-                                </div>
-                            </>
+                                }
+                            </div>
                         ))}
                     </div>
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">

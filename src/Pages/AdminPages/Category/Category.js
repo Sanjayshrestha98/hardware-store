@@ -62,10 +62,9 @@ function Category() {
       })
 
       if (result.data.success) {
-        console.log(result.data)
-        setCategoryData(result.data.data)
-        setTotalCategoryCount(result.data.totalCount)
-        setTotalCategoryPage(Math.ceil(result.data.totalCount / categoryPageSize))
+        setCategoryData(result?.data?.data)
+        setTotalCategoryCount(result?.data?.totalCount)
+        setTotalCategoryPage(Math.ceil(result?.data?.totalCount / categoryPageSize))
       } else toast.error('Failed')
     } catch (ERR) {
       console.log(ERR)
