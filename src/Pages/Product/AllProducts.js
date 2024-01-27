@@ -61,6 +61,7 @@ function AllProducts() {
     console.log(category)
 
     const [categoryData, setCategoryData] = useState([])
+    const [productData, setProductData] = useState([])
 
 
     const getAllCategory = async () => {
@@ -81,11 +82,35 @@ function AllProducts() {
             toast.error(ERR?.response?.data?.msg)
         }
     }
+    const getAllProducts = async () => {
+        try {
+            let result = await axios.get('/product', {
+                params: {
+                    search: "",
+                    page: 1,
+                    size: 50,
+                    price: -1,
+                }
+            })
+
+            if (result.data.success) {
+                setProductData(result?.data?.data ? result?.data?.data : [])
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR?.response?.data?.msg)
+        }
+    }
 
     useEffect(() => {
         getAllCategory()
+    }, [])
+
+    useEffect(() => {
+        getAllProducts()
     }, [category])
 
+    console.log('productData', productData)
     return (
         <div className="bg-white">
             <div>
@@ -270,11 +295,11 @@ function AllProducts() {
                             <div className="lg:col-span-3 border-l">
                                 <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
                                     <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-                                        {products.map((product, index) => (
+                                        {productData.map((product, index) => (
                                             <Link to={`/product/${product.id}`} key={index} className="group relative" role='button'>
                                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                                                     <img
-                                                        src={product.imageSrc}
+                                                        src={product.variant[0].images[0]}
                                                         alt={product.imageAlt}
                                                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                                     />
@@ -284,12 +309,12 @@ function AllProducts() {
                                                         <h3 className="text-sm text-gray-700">
                                                             <a href={product.href}>
                                                                 <span aria-hidden="true" className="absolute inset-0" />
-                                                                {product.name}
+                                                                {product.product_name}
                                                             </a>
                                                         </h3>
-                                                        <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                                                        <p className="mt-1 text-sm text-gray-500">{product.variant[0].color}</p>
                                                     </div>
-                                                    <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                                                    <p className="text-sm font-medium text-gray-900">Rs. {product.variant[0].price}</p>
                                                 </div>
                                             </Link>
                                         ))}

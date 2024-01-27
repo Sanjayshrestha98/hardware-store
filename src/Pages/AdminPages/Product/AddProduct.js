@@ -183,7 +183,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                         {props.values.variant && props.values.variant.length > 0 ? (
                           props.values.variant.map((value, index) => (
                             <div key={index} className='flex gap-2 mb-2 items-center'>
-                              <div>
+                              <div className='hidden'>
                                 {console.log('value', value)}
                                 <label
                                   id="sku"
@@ -192,6 +192,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                                   SKU
                                 </label>
                                 <Field
+                                  value={`${props.values.variant[index].variant_type[0].size}-${value.variant_type[0].color}`}
                                   className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   name={`variant.${index}.sku`} />
 
@@ -204,6 +205,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                                   Stock
                                 </label>
                                 <Field
+                                  type="number"
                                   className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   name={`variant.${index}.stock`} />
 
@@ -240,6 +242,10 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                                   Color
                                 </label>
                                 <Field
+                                  onChange={(e) => {
+                                    props.handleChange(e)
+                                    props.setFieldValue(`variant.${index}.sku`, `${value.variant_type[0].size}-${value.variant_type[0].color}`)
+                                  }}
                                   className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   name={`variant.${index}.variant_type[0].color`} />
                               </div>
