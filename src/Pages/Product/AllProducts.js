@@ -248,7 +248,7 @@ function AllProducts() {
                                             <Link to={`/product/${product.product_sku}`} key={index} className="group relative" role='button'>
                                                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                                                     <img
-                                                        src={`${process.env.REACT_APP_IMG_URI}${product.variant[0].images[0]}`}
+                                                        src={`${process.env.REACT_APP_IMG_URI}${product.images[0]}`}
                                                         alt={product.imageAlt}
                                                         className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                                                     />
@@ -259,9 +259,9 @@ function AllProducts() {
                                                             <span aria-hidden="true" className="absolute inset-0" />
                                                             {product.product_name}
                                                         </h3>
-                                                        <p className="mt-1 text-sm text-gray-500 capitalize">{product.variant[0].variant_type[0].color}</p>
+                                                        {/* <p className="mt-1 text-sm text-gray-500 capitalize">{product.variant[0].variant_type[0].color}</p> */}
                                                     </div>
-                                                    <p className="text-sm font-medium text-gray-900">Rs. {product.variant[0].price}</p>
+                                                    <p className="text-sm font-medium text-gray-900">Rs. {product.price}</p>
                                                 </div>
                                             </Link>
                                         ))}

@@ -1,6 +1,7 @@
 import axios from '../../axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { FaHeart } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 
 function SingleProduct() {
@@ -9,7 +10,7 @@ function SingleProduct() {
     console.log(id)
 
     const [productData, setProductData] = useState()
-    const [selectedVariantData, setSelectedVariantData] = useState()
+    // const [selectedVariantData, setSelectedVariantData] = useState()
 
     const getProductDetail = async () => {
         try {
@@ -17,7 +18,33 @@ function SingleProduct() {
 
             if (result.data.success) {
                 setProductData(result?.data?.data ? result?.data?.data : [])
-                setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
+                // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR?.response?.data?.msg)
+        }
+    }
+    const addToCart = async () => {
+        try {
+            let result = await axios.get('/product/' + id)
+
+            if (result.data.success) {
+                setProductData(result?.data?.data ? result?.data?.data : [])
+                // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR?.response?.data?.msg)
+        }
+    }
+    const addToWishlist = async () => {
+        try {
+            let result = await axios.post('/wishlist/' + productData?._id)
+
+            if (result.data.success) {
+                toast.success('Added To Wishlist')
+                // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
             } else toast.error('Failed')
         } catch (ERR) {
             console.log(ERR)
@@ -30,7 +57,7 @@ function SingleProduct() {
     }, [id])
 
 
-    console.log('selectedVariantData', selectedVariantData)
+    // console.log('selectedVariantData', selectedVariantData)
     return (
         <div>
             <div className="bg-white">
@@ -65,7 +92,7 @@ function SingleProduct() {
                             <img src="https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg" alt="Two each of gray, white, and black shirts laying flat." className="h-full w-full object-cover object-center" />
                         </div> */}
                         {
-                            selectedVariantData?.images?.map((value, index) => (
+                            productData?.images?.map((value, index) => (
                                 <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg" key={index}>
                                     <img src={`${process.env.REACT_APP_IMG_URI}${value}`} alt="Prod Img" className="h-full w-full object-cover object-center" />
                                 </div>
@@ -83,8 +110,7 @@ function SingleProduct() {
                         </div>
 
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
-                            <h2 className="sr-only">Product information</h2>
-                            <p className="text-3xl tracking-tight text-gray-900">Rs. {selectedVariantData?.price}</p>
+                            <p className="text-3xl tracking-tight text-gray-900">Rs. {productData?.price}</p>
 
                             {/* <div className="mt-6">
                                 <h3 className="sr-only">Reviews</h3>
@@ -111,7 +137,7 @@ function SingleProduct() {
                                 </div>
                             </div> */}
 
-                            <form className="mt-10">
+                            {/* <form className="mt-10">
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
@@ -140,17 +166,16 @@ function SingleProduct() {
                                     </fieldset>
                                 </div>
 
-                                {/* <!-- Sizes --> */}
                                 <div className="mt-10">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                                        {/* <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Size guide</a> */}
+                                        <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">Size guide</a>
                                     </div>
 
                                     <fieldset className="mt-4">
                                         <legend className="sr-only">Choose a size</legend>
                                         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                                            {/* <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-not-allowed bg-gray-50 text-gray-200">
+                                            <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-not-allowed bg-gray-50 text-gray-200">
                                                 <input type="radio" name="size-choice" value="XXS" disabled className="sr-only" aria-labelledby="size-choice-0-label" />
                                                 <span id="size-choice-0-label">XXS</span>
                                                 <span aria-hidden="true" className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200">
@@ -158,10 +183,10 @@ function SingleProduct() {
                                                         <line x1="0" y1="100" x2="100" y2="0" vector-effect="non-scaling-stroke" />
                                                     </svg>
                                                 </span>
-                                            </label> */}
+                                            </label>
 
                                             {
-                                                productData?.variant.map((value, index) => (
+                                                productData?.map((value, index) => (
                                                     <label className="group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 cursor-pointer bg-white text-gray-900 shadow-sm">
                                                         <input type="radio" name="size-choice" value="XS" className="sr-only" aria-labelledby="size-choice-1-label" />
                                                         <span id="size-choice-1-label">{value?.variant_type[0].size}</span>
@@ -176,8 +201,18 @@ function SingleProduct() {
                                     </fieldset>
                                 </div>
 
-                                <button type="submit" className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to Cart</button>
-                            </form>
+                            </form> */}
+                            <div className='flex flex-wrap gap-3'>
+                                <button type="button" className="mt-5 flex flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Add to Cart</button>
+                                <button type="button"
+                                    onClick={() => {
+                                        addToWishlist()
+                                    }}
+                                    className="mt-5 flex w-fit items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                    {/* Add to Wishlist */}
+                                    <FaHeart />
+                                </button>
+                            </div>
                         </div>
 
                         <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">

@@ -8,9 +8,9 @@ import { object } from 'yup'
 function AddProduct({ modalIsOpen, closeModal, getRoute }) {
 
   const [categoryList, setCategoryList] = useState()
+  const [imageList, setImageList] = useState([])
 
   console.log(categoryList)
-
 
   const getAllCategory = async () => {
     try {
@@ -29,21 +29,24 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
     getAllCategory()
   }, [])
 
-  const imageData = new FormData
+  // const imageData = new FormData
 
-  const handleImages = (variant_type, files) => {
-    for (let i in files) {
-      const file = files[i];
-      if (file instanceof File) {
-        const key = Object.values(variant_type[0]).filter(e => e !== '' && e !== undefined).join('-')
-        imageData.append(key, file);
-      }
-    }
+  const handleImages = (files) => {
+
+    console.log('files', files)
+    setImageList([
+      ...files
+    ])
 
     // for (let i in files) {
-    //   imageData.append(`${size}-${color}`, files[i])
+    //   const file = files[i];
+    //   if (file instanceof File) {
+    //     const key = Object.values(variant_type[0]).filter(e => e !== '' && e !== undefined).join('-')
+    //     imageData.append(key, file);
+    //   }
     // }
   }
+  console.log('imagelist', imageList)
 
   const addProduct = async (values, actions) => {
     try {
@@ -56,10 +59,14 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
         } else formData.append(value, values[value])
       }
 
-      // Append fields from imageData to formData
-      for (const [key, value] of imageData.entries()) {
-        formData.append(key, value);
+      for (let image in imageList) {
+        formData.append('images', imageList[image])
       }
+
+      // Append fields from imageData to formData
+      // for (const [key, value] of imageData.entries()) {
+      //   formData.append(key, value);
+      // }
 
       let result = await axios.post('/product', formData)
 
@@ -91,15 +98,15 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
             product_name: "",
             category: "",
             description: "",
-            variant: [{
-              sku: "",
-              stock: "",
-              price: "",
-              variant_type: [{
-                size: "",
-                color: ""
-              }],
-            }],
+            stock: "",
+            price: "",
+            // variant: [{
+            //   sku: "",
+            //   variant_type: [{
+            //     size: "",
+            //     color: ""
+            //   }],
+            // }],
           }}
           onSubmit={async (values, actions) => {
             addProduct(values, actions);
@@ -140,7 +147,7 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                     aria-labelledby="category"
                     className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   >
-                    <option>Select Category</option>
+                    <option value={""}>Select Category</option>
                     {
                       categoryList && categoryList.map((value, index) => (
                         <option className='' value={value._id} key={index}>{value.name}</option>
@@ -188,11 +195,13 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                     Price
                   </label>
                   <Field
+                    min={10}
+                    type="number"
                     className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     name={`price`} />
 
                 </div>
-                <div>
+                {/* <div>
                   <label
                     id="size"
                     className="block w-full text-sm font-medium leading-6 text-gray-900"
@@ -203,8 +212,8 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                     className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     name={`size`} />
 
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label
                     id="color"
                     className="block w-full text-sm font-medium leading-6 text-gray-900"
@@ -212,26 +221,22 @@ function AddProduct({ modalIsOpen, closeModal, getRoute }) {
                     Color
                   </label>
                   <Field
-                    // onChange={(e) => {
-                    //   props.handleChange(e)
-                    //   props.setFieldValue(`variant.${index}.sku`, `${value.variant_type[0].size}-${e.target.value}`)
-                    // }}
                     className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    name={`color`} 
-                    
-                    />
-                </div>
+                    name={`color`}
+
+                  />
+                </div> */}
                 <div>
                   <label
-                    id="color"
+                    id="images"
                     className="block w-full text-sm font-medium leading-6 text-gray-900"
                   >
                     Images
                   </label>
                   <input
-                    // onChange={(e) => {
-                    //   handleImages(value.variant_type, e.target.files)
-                    // }}
+                    onChange={(e) => {
+                      handleImages(e.target.files)
+                    }}
                     accept="image/*"
                     multiple
                     type="file"
