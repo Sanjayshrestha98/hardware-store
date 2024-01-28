@@ -10,8 +10,6 @@ import { FaHamburger } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
 import toast from 'react-hot-toast';
 
-
-
 const AppNavbar = () => {
     const authUser = useContext(AuthContext);
     const navigate = useNavigate();
@@ -113,8 +111,8 @@ const AppNavbar = () => {
             <header className={` inset-x-0 top-0 z-50 ${navbackground ? "bg-white" : "bg-transparent"}`}>
                 <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
-                        <a href="#" className="-m-1.5 p-1.5">
-                            <span className="sr-only">Your Company</span>
+                        <a href="/" className="-m-1.5 p-1.5">
+                            <span className="sr-only">Build Up</span>
                             <img
                                 className="h-8 w-auto"
                                 src="/app_logo.png"
@@ -132,7 +130,7 @@ const AppNavbar = () => {
                             <FaBars className="h-6 w-6" aria-hidden="true" />
                         </button>
                     </div>
-                    <div className="hidden lg:flex lg:gap-x-12 ">
+                    <div     className="hidden lg:flex lg:gap-x-12 ">
                         {navigation.map((item, index) => (
                             <div role='button' key={index} onClick={() => {
                                 if (!item.children) {

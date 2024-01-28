@@ -29,12 +29,14 @@ function Cartpage() {
 
     console.log(cartData)
 
-    const addToCart = async (id) => {
+    const removeFromCart = async (id, quantity) => {
         try {
-            let result = await axios.post('/cart/' + id)
+            let result = await axios.put('/cart/add-remove-item', {
+                cartitem: id,
+                quantity: -quantity
+            })
 
             if (result.data.success) {
-                toast.success('Removed From Cart')
                 getAllCart()
                 // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
             } else toast.error('Failed')
@@ -157,7 +159,9 @@ function Cartpage() {
                                                     </div>
 
                                                     <div className="flex">
-                                                        <button type="button" className="font-medium text-red-600 hover:text-red-500">Remove</button>
+                                                        <button type="button" onClick={() => {
+                                                            removeFromCart(value?._id, value?.quantity)
+                                                        }} className="font-medium text-red-600 hover:text-red-500">Remove</button>
                                                     </div>
                                                 </div>
                                             </div>

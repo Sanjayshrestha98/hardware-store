@@ -22,6 +22,7 @@ import User from './Pages/AdminPages/User/User';
 import Profile from './Pages/Profile/Profile';
 import Footer from './components/Footer';
 import AboutPage from './Pages/AboutUs/AboutPage';
+import Orders from './Pages/AdminPages/Orders/Orders';
 
 function App() {
 
@@ -101,6 +102,14 @@ function App() {
                 element={
                   <ProtectedAdminRoute>
                     <User />
+                  </ProtectedAdminRoute>
+                }
+              />
+              <Route
+                path="/dashboard/orders"
+                element={
+                  <ProtectedAdminRoute>
+                    <Orders />
                   </ProtectedAdminRoute>
                 }
               />

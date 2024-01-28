@@ -15,6 +15,7 @@ const navigation = [
   { name: 'users', href: '/dashboard/users' },
   { name: 'products', href: '/dashboard/products' },
   { name: 'category', href: '/dashboard/category' },
+  { name: 'orders', href: '/dashboard/orders' },
 ]
 const userNavigation = [
   { name: 'Your Profile', href: '/profile' },

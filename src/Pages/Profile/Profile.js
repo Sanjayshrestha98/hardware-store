@@ -5,10 +5,11 @@ import toast from 'react-hot-toast'
 import { AuthContext } from '../../context/authContext'
 
 function Profile() {
+    const { userDetails, setUserDetails } = useContext(AuthContext)
 
     const [profileDetails, setProfileDetails] = useState([])
     const [editProfile, setEditProfile] = useState()
-    const { userDetails, setUserDetails } = useContext(AuthContext)
+    const [orderDetails, setOrderDetails] = useState([])
 
     const openEditProfile = () => {
         setEditProfile(true)
@@ -20,11 +21,22 @@ function Profile() {
 
     const uploadRef = useRef()
 
-    const getProfileDetails = async (id) => {
+    const getProfileDetails = async () => {
         try {
             let result = await axios.get('/user/my-profile/')
             if (result.data.success) {
                 setProfileDetails(result.data.data)
+
+            }
+        } catch (ERR) {
+            console.log(ERR)
+        }
+    }
+    const getMyOrders = async () => {
+        try {
+            let result = await axios.get('/cart/my-order/')
+            if (result.data.success) {
+                setOrderDetails(result.data.data)
 
             }
         } catch (ERR) {
@@ -57,7 +69,10 @@ function Profile() {
 
     useEffect(() => {
         getProfileDetails()
+        getMyOrders()
     }, [])
+
+    console.log(orderDetails)
 
     return (
         <div className="h-full bg-gray-50 p-8 max-w-7xl mx-auto">
@@ -133,11 +148,43 @@ function Profile() {
                                 <span className="font-bold w-24">Address:</span>
                                 <span className="text-gray-700">{profileDetails?.address}</span>
                             </li>
-                            {/*  firstname: "",
-                        lastname: "",
-                        email: "",
-                        contact: "",
-                        address: "", */}
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+            <div className="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
+                <div className="w-full flex flex-col">
+                    <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
+                        <h4 className="text-xl text-gray-900 font-bold">My Orders</h4>
+                        <ul className="mt-2 text-gray-700">
+                            {
+                                orderDetails?.map((value, index) => (
+                                    <li className="flex py-6" key={index}>
+                                        <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                                            <img src={`${process.env.REACT_APP_IMG_URI}${value?.item?.images[0]}`} alt="Wishlist product." className="h-full w-full object-cover object-center" />
+                                        </div>
+
+                                        <div className="ml-4 flex flex-1 flex-col">
+                                            <div>
+                                                <div className="flex justify-between text-base font-medium text-gray-900">
+                                                    <h3>
+                                                        <a href={`product/` + value?.product_sku}>{value?.item?.product_name}</a>
+                                                    </h3>
+                                                    <p className="ml-4">Rs. {value?.price}</p>
+                                                </div>
+                                                <p className="mt-1 text-sm text-gray-500">Quantity: {value?.quantity}</p>
+                                            </div>
+                                            <div className="flex flex-1 items-center mt-2 justify-end text-sm">
+                                                <p onClick={() => {
+                                                    // addToWishlist(value?.product._id)
+                                                }} type="button" className="font-medium text-red-600 hover:text-red-500">Status : {value?.status}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))
+                            }
 
                         </ul>
                     </div>
