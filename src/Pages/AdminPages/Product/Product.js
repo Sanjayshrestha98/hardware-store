@@ -125,6 +125,7 @@ function Product() {
             <tr className='opacity-75'>
               <th className='p-3'>S.N</th>
               <th className='p-3'>Name</th>
+              <th className='p-3'>Image</th>
               <th className='p-3'>SKU</th>
               <th className='p-3'>Stock</th>
               <th className='p-3'>Category</th>

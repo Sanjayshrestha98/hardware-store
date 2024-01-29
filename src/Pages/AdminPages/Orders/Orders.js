@@ -141,7 +141,7 @@ function Orders() {
         }} className='bg-blue-800 p-3 rounded-md text-white font-semibold px-4'>Add Order</button> */}
             </div>
             <div>
-                <input className='border p-2' type='string' placeholder='Search' onChange={(e) => {
+                <input className='border p-2' type='string' placeholder='Search By Email' onChange={(e) => {
                     setKeyword(e.target.value)
                     setCurrentOrderPage(1)
                 }} />
@@ -150,9 +150,11 @@ function Orders() {
                 <table className="table-auto rounded-lg border w-full text-left ">
                     <thead className='font-semibold border-b bg-blue-100 rounded'>
                         <tr className=''>
-                            <th className='p-3'>S.N</th>
+                            <th className='p-3'>#</th>
                             <th className='p-3'>Customer Name</th>
                             <th className='p-3'>Contact</th>
+                            <th className='p-3'>Email</th>
+                            <th className='p-3'>Cart #</th>
                             <th className='p-3'>Product</th>
                             <th className='p-3'>Quantity</th>
                             <th className='p-3'>Status</th>
@@ -169,17 +171,15 @@ function Orders() {
                                     <tr key={index} className='border-b'>
                                         <td className='p-3'>{index + 1}</td>
                                         <td className='p-3'>{value?.cart?.user_id?.firstname}</td>
-
                                         <td className='p-3'>{value?.cart?.user_id?.contact}</td>
-                                        <td className='p-3'>#{value?.item.product_name}</td>
+                                        <td className='p-3'>{value?.cart?.user_id?.email}</td>
+                                        <td className='p-3'>{value?.cart?.cart_no}</td>
+                                        <td className='p-3'>{value?.item?.product_name}</td>
                                         <td className='p-3'>{value?.quantity}</td>
                                         <td className='p-3'>{value?.status}</td>
                                         <td className='p-3'>Rs. {value?.cart?.grand_total}</td>
                                         <td className='p-3 flex gap-2 flex-wrap max-w-fit'>
-                                            {/* <button className='bg-red-700 text-white p-2 rounded' onClick={() => {
-                                                removeItem(value._id)
-                                            }}><FaTrashAlt />
-                                            </button> */}
+
                                             <select onChange={(e) => {
                                                 if (e.target.value) {
                                                     changeStatus(value._id, e.target.value)

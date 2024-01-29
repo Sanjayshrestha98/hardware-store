@@ -149,7 +149,8 @@ function Category() {
                       }
 
                     </td>
-                    <td className='p-3'>{value?.name}</td>
+                    <td className='p-3'>{Date(value?.createdAt)}</td>
+
                     <td className='p-3 flex gap-2 flex-wrap max-w-fit'>
                       <button className='bg-red-700 text-white p-2 rounded' onClick={() => {
                         removeItem(value._id)

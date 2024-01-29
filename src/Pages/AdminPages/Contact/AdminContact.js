@@ -46,12 +46,12 @@ function AdminContact() {
         <h1 className="text-4xl font-bold tracking-tight text-gray-900">Contacts</h1>
       </div>
 
-      <div>
+      {/* <div>
         <input className='border p-2' type='string' placeholder='Search' onChange={(e) => {
           setKeyword(e.target.value)
           setCurrentContactPage(1)
         }} />
-      </div>
+      </div> */}
 
       <div className='w-full my-5  bg-white'>
         <table className="table-auto w-full rounded-lg border text-left ">
