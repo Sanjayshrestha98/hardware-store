@@ -23,6 +23,7 @@ import Profile from './Pages/Profile/Profile';
 import Footer from './components/Footer';
 import AboutPage from './Pages/AboutUs/AboutPage';
 import Orders from './Pages/AdminPages/Orders/Orders';
+import AdminContact from './Pages/AdminPages/Contact/AdminContact';
 
 function App() {
 
@@ -106,10 +107,10 @@ function App() {
                 }
               />
               <Route
-                path="/dashboard/orders"
+                path="/dashboard/contact"
                 element={
                   <ProtectedAdminRoute>
-                    <Orders />
+                    <AdminContact />
                   </ProtectedAdminRoute>
                 }
               />

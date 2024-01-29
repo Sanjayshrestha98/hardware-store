@@ -1,14 +1,15 @@
 import toast from 'react-hot-toast'
 import axios from '../../axios'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Home() {
 
+    const navigate = useNavigate();
 
     const [productList, setProductList] = useState()
 
-   
+
     const callouts = [
         {
             name: 'Desk and Office',
@@ -56,6 +57,33 @@ export default function Home() {
     useEffect(() => {
         getAllProducts()
     }, [])
+
+    const [categoryData, setCategoryData] = useState([])
+
+    const getAllCategory = async () => {
+        try {
+            let result = await axios.get('/category', {
+                params: {
+                    search: "",
+                    page: 1,
+                    size: 50
+                }
+            })
+
+            if (result.data.success) {
+                setCategoryData(result?.data?.data ? result?.data?.data : [])
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR?.response?.data?.msg)
+        }
+    }
+
+    useEffect(() => {
+        getAllCategory()
+    }, [])
+
+
 
     return (
         <div className="bg-white">
@@ -138,35 +166,39 @@ export default function Home() {
                 </div>
             </div>
 
-            {/* Category */}
-            {/* <div className="bg-gray-100">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
-                        <h2 className="text-2xl font-bold text-gray-900">Explore Collections</h2>
+            {/* Categories */}
+            <div className="bg-white">
+                <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">Categories</h2>
 
-                        <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
-                            {callouts.map((callout, index) => (
-                                <div key={index} className="group relative">
-                                    <div className="relative h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
-                                        <img
-                                            src={callout.imageSrc}
-                                            alt={callout.imageAlt}
-                                            className="h-full w-full object-cover object-center"
-                                        />
-                                    </div>
-                                    <h3 className="mt-6 text-sm text-gray-500">
-                                        <a href={callout.href}>
-                                            <span className="absolute inset-0" />
-                                            {callout.name}
-                                        </a>
-                                    </h3>
-                                    <p className="text-base font-semibold text-gray-900">{callout.description}</p>
+                    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                        {categoryData?.map((value, index) => (
+                            <div
+                                onClick={() => {
+                                    navigate('/product', { state: { category: value._id } });
+                                }}
+                                key={index} className="group relative" role='button'>
+                                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                                    <img
+                                        src={`${process.env.REACT_APP_IMG_URI}${value.image}`}
+                                        alt={value.imageAlt}
+                                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                    />
                                 </div>
-                            ))}
-                        </div>
+                                <div className="mt-4 flex justify-between">
+                                    <div>
+                                        <h3 className="text-gray-700 capitalize">
+                                            <span aria-hidden="true" className="absolute inset-0" />
+                                            {value.name}
+                                        </h3>
+                                        {/* <p className="mt-1 text-gray-500 capitalize">{value.variant[0].variant_type[0].color}</p> */}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
-            </div> */}
+            </div>
 
         </div>
     )
