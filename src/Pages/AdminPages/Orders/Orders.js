@@ -150,6 +150,7 @@ function Orders() {
                 <table className="table-auto rounded-lg border w-full text-left ">
                     <thead className='font-semibold border-b bg-blue-100 rounded'>
                         <tr className=''>
+                            <th className='p-3'>S.N</th>
                             <th className='p-3'>Customer Name</th>
                             <th className='p-3'>Contact</th>
                             <th className='p-3'>Product</th>
@@ -166,9 +167,11 @@ function Orders() {
                                 <p className='p-5 font-semibold text-red-800'>No Data</p> :
                                 orderData.map((value, index) => (
                                     <tr key={index} className='border-b'>
+                                        <td className='p-3'>{index + 1}</td>
                                         <td className='p-3'>{value?.cart?.user_id?.firstname}</td>
+
                                         <td className='p-3'>{value?.cart?.user_id?.contact}</td>
-                                        <td className='p-3'>#{value?.cart?.cart_no}</td>
+                                        <td className='p-3'>#{value?.item.product_name}</td>
                                         <td className='p-3'>{value?.quantity}</td>
                                         <td className='p-3'>{value?.status}</td>
                                         <td className='p-3'>Rs. {value?.cart?.grand_total}</td>
