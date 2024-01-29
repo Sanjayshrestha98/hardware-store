@@ -147,9 +147,9 @@ function Orders() {
                 }} />
             </div>
             <div className='w-full my-5  bg-white'>
-                <table className="table-auto w-full text-left ">
-                    <thead className='font-semibold border-b bg-gray-100'>
-                        <tr className='opacity-75'>
+                <table className="table-auto rounded-lg border w-full text-left ">
+                    <thead className='font-semibold border-b bg-blue-100 rounded'>
+                        <tr className=''>
                             <th className='p-3'>Customer Name</th>
                             <th className='p-3'>Contact</th>
                             <th className='p-3'>Product</th>

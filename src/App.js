@@ -114,6 +114,14 @@ function App() {
                   </ProtectedAdminRoute>
                 }
               />
+              <Route
+                path="/dashboard/orders"
+                element={
+                  <ProtectedAdminRoute>
+                    <Orders />
+                  </ProtectedAdminRoute>
+                }
+              />
             </Routes>
           </div>
           <Footer />

@@ -166,6 +166,25 @@ export default function Home() {
                 </div>
             </div>
 
+            <div class="bg-blue-50 py-24 sm:py-32">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <dl class="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-3">
+                        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+                            <dt class="text-base leading-7 text-gray-600">Browse through hundreds of products</dt>
+                            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">Variety Of Products</dd>
+                        </div>
+                        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+                            <dt class="text-base leading-7 text-gray-600">Easy to Navigate</dt>
+                            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">User-Friendly Interface</dd>
+                        </div>
+                        <div class="mx-auto flex max-w-xs flex-col gap-y-4">
+                            <dt class="text-base leading-7 text-gray-600">Free Shipping</dt>
+                            <dd class="order-first text-3xl font-semibold tracking-tight text-gray-900 sm:text-5xl">0 Delivery  Charge</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+
             {/* Categories */}
             <div className="bg-white">
                 <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

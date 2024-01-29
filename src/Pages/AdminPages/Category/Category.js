@@ -119,8 +119,8 @@ function Category() {
       </div>
 
       <div className='w-full my-5  bg-white'>
-        <table className="table-auto w-full text-left ">
-          <thead className='font-semibold border-b bg-gray-100'>
+        <table className="table-auto w-full rounded-lg border text-left ">
+          <thead className='font-semibold border-b bg-blue-100'>
             <tr className='opacity-75'>
               <th className='p-3'>Name</th>
               <th className='p-3'>Created Date</th>

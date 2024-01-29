@@ -1,14 +1,29 @@
 import axios from '../../../axios'
 import { Field, Form, Formik } from 'formik'
-import React from 'react'
+import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import Modal from 'react-modal'
 
 function EditCategoryModal({ modalIsOpen, closeModal, getRoute, categoryData }) {
 
+  const [image, setImage] = useState()
+
   const editCategory = async (values, actions) => {
     try {
-      let result = await axios.put('/category/' + categoryData?._id, values)
+
+      let formdata = new FormData
+
+      if (image) {
+        formdata.append('image', image)
+      }
+
+
+      for (let value in values) {
+        formdata.append(value, values[value])
+      }
+
+
+      let result = await axios.put('/category/' + categoryData?._id, formdata)
 
       if (result.data.success) {
         toast.success('Category Edited Successfully')
@@ -20,6 +35,7 @@ function EditCategoryModal({ modalIsOpen, closeModal, getRoute, categoryData }) 
       toast.error(ERR.response.data.msg)
     }
   }
+
 
 
   return (
@@ -59,6 +75,39 @@ function EditCategoryModal({ modalIsOpen, closeModal, getRoute, categoryData }) 
                   type="name"
                   className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+              </div>
+
+              <div className='mt-4'>
+                <label
+                  id="image"
+                  className="block w-full text-sm font-medium leading-6 text-gray-900"
+                >
+                  Image
+                </label>
+                <input
+                  onChange={(e) => {
+                    setImage(e.target.files[0])
+                  }}
+                  required
+                  type="file"
+                  className="block mt-2 w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-600 sm:text-sm sm:leading-6"
+                />
+
+                {
+                  categoryData.image &&
+                  <div>
+                    <label
+                      id="image"
+                      className="block w-full text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Previous Image
+                    </label>
+
+                    <img
+                      src={`${process.env.REACT_APP_IMG_URI}${categoryData?.image}`}
+                    />
+                  </div>
+                }
               </div>
 
               <div className="mt-8 flex gap-4">
