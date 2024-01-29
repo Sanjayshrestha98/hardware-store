@@ -50,11 +50,14 @@ export default function AdminNavbar() {
             <div className="flex h-16 items-center justify-between">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <img
-                    className="h-8 w-8"
-                    src="/app_logo.png"
-                    alt="applog"
-                  />
+                  <a href='/'>
+
+                    <img
+                      className="h-8 w-8"
+                      src="/app_logo.png"
+                      alt="applog"
+                    />
+                  </a>
                 </div>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
