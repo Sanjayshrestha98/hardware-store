@@ -147,7 +147,7 @@ function Orders() {
                     setKeyword(e.target.value)
                     setCurrentOrderPage(1)
                 }} />
-                <input className='border p-2' type='string' placeholder='Search By Cart #' onChange={(e) => {
+                <input className='border p-2' type='number' placeholder='Search By Cart #' onChange={(e) => {
                     setCartKeyword(e.target.value)
                     setCurrentOrderPage(1)
                 }} />
