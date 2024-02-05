@@ -11,7 +11,7 @@ function AllProducts() {
 
     const navigate = useNavigate()
     const location = useLocation();
-    const { category } = location.state || {};
+    const { category, search } = location.state || {};
 
     const [categoryData, setCategoryData] = useState([])
     const [productData, setProductData] = useState([])
@@ -39,7 +39,7 @@ function AllProducts() {
         try {
             let result = await axios.get('/product', {
                 params: {
-                    search: "",
+                    search: search,
                     page: 1,
                     size: 50,
                     price: priceFilter,
@@ -270,6 +270,20 @@ function AllProducts() {
                             </div>
                             <div className="lg:col-span-3 border-l">
                                 <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
+                                    {
+                                        search &&
+                                        <div className='flex gap-4 mt-6'>
+                                            <label>Showing products for : "{search}"</label>
+                                            <button className='flex items-center gap-2 px-3 rounded-full text-sm' onClick={() => {
+                                                clearFilter()
+                                            }}><span>Clear</span>
+                                                <span className=" flex items-center rotate-45">
+                                                    <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+                                                    </svg>
+                                                </span></button>
+                                        </div>
+                                    }
                                     <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                                         {productData.map((product, index) => (
                                             <Link to={`/product/${product.product_sku}`} key={index} className="group relative" role='button'>

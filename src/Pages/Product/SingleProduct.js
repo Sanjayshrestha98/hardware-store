@@ -1,7 +1,9 @@
+import { Field, Form, Formik } from 'formik'
 import axios from '../../axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { FaHeart } from 'react-icons/fa'
+import { FaHeart, FaStar } from 'react-icons/fa'
+import Rating from 'react-rating'
 import { useParams } from 'react-router-dom'
 
 function SingleProduct() {
@@ -10,6 +12,7 @@ function SingleProduct() {
     console.log(id)
 
     const [productData, setProductData] = useState()
+    const [ratingData, setRatingData] = useState()
     // const [selectedVariantData, setSelectedVariantData] = useState()
 
     const getProductDetail = async () => {
@@ -18,6 +21,28 @@ function SingleProduct() {
 
             if (result.data.success) {
                 setProductData(result?.data?.data ? result?.data?.data : [])
+                // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
+                getReviews(result?.data?.data?._id)
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            toast.error(ERR?.response?.data?.msg)
+        }
+    }
+
+    const getReviews = async (id) => {
+        try {
+            let result = await axios.get('/review/' + id, {
+                params: {
+                    page: 1,
+                    size: 999
+                }
+            })
+
+            if (result.data.success) {
+                console.log(result.data.data)
+                setRatingData(result.data.data)
+                // setProductData(result?.data?.data ? result?.data?.data : [])
                 // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
             } else toast.error('Failed')
         } catch (ERR) {
@@ -42,6 +67,22 @@ function SingleProduct() {
             toast.error(ERR?.response?.data?.msg)
         }
     }
+    const addReview = async (values, actions) => {
+        try {
+            let result = await axios.post('/review', values)
+
+            if (result.data.success) {
+                toast.success('Review Added Successfully')
+                getReviews(productData?._id)
+                actions.resetForm()
+            } else toast.error('Failed')
+        } catch (ERR) {
+            console.log(ERR)
+            if (ERR?.response?.status === 401) {
+                toast.error('Please Login To Review.')
+            } else toast.error(ERR?.response?.data?.message)
+        }
+    }
     const addToWishlist = async () => {
         try {
             let result = await axios.post('/wishlist/' + productData?._id)
@@ -60,12 +101,16 @@ function SingleProduct() {
         getProductDetail()
     }, [id])
 
+    // useEffect(() => {
+    //     getReviews()
+    // }, [productData?.id])
+
 
     // console.log('selectedVariantData', selectedVariantData)
     return (
         <div>
             <div className="bg-white">
-                <div className="pt-6">
+                <div className="py-6">
                     {/* <nav aria-label="Breadcrumb">
                         <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                             <li>
@@ -115,7 +160,12 @@ function SingleProduct() {
 
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <p className="text-3xl tracking-tight text-gray-900">Rs. {productData?.price}</p>
-
+                            <div className='flex items-center gap-3 my-3'>
+                                <Rating step={1} name="rating" readonly initialRating={productData?.rating} fullSymbol={<FaStar color='#ffe234' size={20} strokeWidth={2} stroke='black' />} emptySymbol={<FaStar color='white' size={20} strokeWidth={2} stroke='black' />} />
+                                <label className='mb-1'>
+                                    {productData?.rating} out of 5 Stars
+                                </label>
+                            </div>
                             {/* <div className="mt-6">
                                 <h3 className="sr-only">Reviews</h3>
                                 <div className="flex items-center">
@@ -257,6 +307,72 @@ function SingleProduct() {
                         </div>
                     </div>
                 </div>
+
+                <section className='max-w-7xl mx-auto p-4'>
+                    <h1 className='text-2xl font-semibold tracking-tight text-gray-900'>
+                        Reviews
+                    </h1>
+
+                    <Formik
+                        enableReinitialize
+                        initialValues={{
+                            rating: 0,
+                            product: productData?._id,
+                            message: ""
+                        }}
+                        onSubmit={(values, actions) => {
+                            addReview(values, actions)
+                        }}
+                    >
+                        {props => (
+                            <Form>
+                                <div className='mt-3'>
+                                    <Rating step={1} name="rating" onChange={(rating) => {
+                                        props.setFieldValue('rating', rating)
+                                    }} value={props.values.rating} initialRating={props.values.rating} fullSymbol={<FaStar color='#ffe234' size={20} strokeWidth={2} stroke='black' />} emptySymbol={<FaStar color='white' size={20} strokeWidth={2} stroke='black' />} />
+                                </div>
+                                <div className='my-3 flex flex-col'>
+                                    <label>Leave a Comment</label>
+
+                                    <Field name="message" value={props.values.message} as="textarea" className='w-full border mt-3 rounded p-2' placeholder='Write a Comment' />
+                                    <button type='submit' className='bg-blue-700 w-fit px-4 py-2 rounded text-white mt-3 place-self-end'>Submit</button>
+                                </div>
+                            </Form>
+                        )}
+                    </Formik>
+
+                    <div className='mt-4'>
+                        <label className='font-semibold'>
+                            Previous Reviews
+                        </label>
+
+                        {
+                            ratingData?.map((value, index) => (
+                                <div className='w-full flex my-4 gap-4 shadow p-2 items-center'>
+                                    <div>
+                                        {
+                                            value.user.image ?
+                                                <img src={`${process.env.REACT_APP_IMG_URI}${value.user.image}`} className='h-10 w-10 object-cover' />
+                                                :
+                                                <img src='/app_logo.png' className='h-10 w-10 object-cover' />
+                                        }
+                                    </div>
+                                    <div className='font-semibold flex flex-col gap-1'>
+
+                                        <Rating step={1} name="rating" readonly initialRating={value?.rating} fullSymbol={<FaStar color='#ffe234' size={14} strokeWidth={2} stroke='black' />} emptySymbol={<FaStar color='white' size={14} strokeWidth={2} stroke='black' />} />
+
+                                        <span>
+                                            {value?.message}
+                                        </span>
+                                        <span className='opacity-50 text-sm'>
+                                            {value.user.firstname} {value.user.lastname} - {Date(value?.createdAt)}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </section>
             </div>
         </div>
     )

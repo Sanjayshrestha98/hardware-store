@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from '../axios';
 import { MdArrowBackIos, MdOutlineMenu, MdOutlineShoppingBag } from 'react-icons/md'
 import { GoBell, GoHeart, GoSearch } from 'react-icons/go'
-import { FaBars, FaThumbsUp } from 'react-icons/fa'
+import { FaBars, FaSearch, FaThumbsUp } from 'react-icons/fa'
 import SideNav from './SideNav';
 import { FaHamburger } from 'react-icons/fa'
 import { MdClose } from 'react-icons/md'
@@ -14,6 +14,7 @@ const AppNavbar = () => {
     const authUser = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+    const [keyword, setKeyword] = useState('')
 
     const [toggleNav, setToggleNav] = useState(true);
     const [notificationModal, setNotificationModal] = useState(false);
@@ -101,6 +102,13 @@ const AppNavbar = () => {
     // console.log("authUSer", authUser);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+    const searchFunction = () => {
+        navigate('/product', {
+            state: {
+                search: keyword
+            }
+        })
+    }
 
     return (
         <div
@@ -130,7 +138,7 @@ const AppNavbar = () => {
                             <FaBars className="h-6 w-6" aria-hidden="true" />
                         </button>
                     </div>
-                    <div     className="hidden lg:flex lg:gap-x-12 ">
+                    <div className="hidden lg:flex lg:gap-x-12 ">
                         {navigation.map((item, index) => (
                             <div role='button' key={index} onClick={() => {
                                 if (!item.children) {
@@ -158,7 +166,21 @@ const AppNavbar = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+                    <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-5">
+                        <div className='border flex '>
+                            <form onSubmit={(e) => {
+                                e.preventDefault()
+                                searchFunction()
+                            }} className='flex'>
+                                <input placeholder='Search Product' type='search' onChange={(e) => {
+                                    setKeyword(e.target.value)
+                                }} className='border rounded-l border-gray-400 p-2 text-sm' />
+                                <button type='submit' className='bg-blue-800 text-white text-sm p-2 rounded-r'>
+                                    <FaSearch size={14} />
+                                </button>
+                            </form>
+                        </div>
+
                         <div className="flex items-center">
                             {isAuthenticated ? (
                                 <div className="flex items-center">
