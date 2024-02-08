@@ -8,19 +8,59 @@ function CheckoutPage({ modalIsOpen, closeModal, getRoute, cartData }) {
 
     const [shippingAddress, setShippingAddress] = useState()
 
+    const khalti_config = {
+        url: 'https://a.khalti.com/api/v2/epayment/initiate/',
+        lookupUrl: 'https://a.khalti.com/api/v2/epayment/lookup/',
+        authorization: 'Key b26ce89491d140278857f68213c778a2',
+        return_url: 'http://localhost:1111/api/cart/checkout',
+        website_url: 'http://localhost:3000'
+    }
+    console.log(cartData.cart?._id)
+
     const checkout = async () => {
         try {
             if (shippingAddress) {
-                let result = await axios.put('/cart/checkout/' + cartData?.cart._id, {
-                    shipping_address: shippingAddress
-                })
-                if (result.data.success) {
-                    toast.success('Your Order has been Placed Successfully')
-                    getRoute()
-                    closeModal()
-                    // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
-                } else toast.error('Failed')
-            }else toast.error('Please add shipping address')
+                const payload = {
+                    "return_url": khalti_config.return_url,
+                    "website_url": khalti_config.website_url,
+                    "amount": cartData.cart?.grand_total * 100 >= 100000 ? 100000 : cartData.cart?.grand_total * 100,
+                    "purchase_order_id": cartData.cart?._id,
+                    "purchase_order_name": shippingAddress
+                };
+
+                const resss = await fetch(khalti_config.url, {
+                    method: "POST",
+                    headers: {
+                        'Authorization': khalti_config.authorization,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+
+                });
+
+                const result = await resss.json();
+
+                console.log(result)
+
+                if(result.payment_url){
+                    window.location.replace(result.payment_url)
+                }
+
+                // return res.status(httpStatus.OK).json({
+                //     response
+                // })
+
+                // let result = await axios.put('/cart/checkout/' + cartData?.cart._id, {
+                //     shipping_address: shippingAddress
+                // })
+                // if (result.data.success) {
+                //     // toast.success('Your Order has been Placed Successfully')
+                //     toast.success('Redirecting You To Payment')
+                //     // getRoute()
+                //     // closeModal()
+                //     // setSelectedVariantData(result?.data?.data?.variant[0] ? result?.data?.data?.variant[0] : [])
+                // } else toast.error('Failed')
+            } else toast.error('Please add shipping address')
         } catch (ERR) {
             console.log(ERR)
             toast.error(ERR?.response?.data?.msg)
@@ -29,7 +69,7 @@ function CheckoutPage({ modalIsOpen, closeModal, getRoute, cartData }) {
 
     return (
         <Modal
-        ariaHideApp={false}
+            ariaHideApp={false}
             isOpen={modalIsOpen}
             onRequestClose={closeModal}
             contentLabel="Add Category Modal"
